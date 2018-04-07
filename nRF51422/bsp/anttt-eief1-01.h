@@ -166,6 +166,7 @@ It is clocked from HFCLK.  To get the desired 1ms tick use a compare period of 0
                                 (GPIO_PIN_CNF_SENSE_Disabled   << GPIO_PIN_CNF_SENSE_Pos) )
 
 
+
                                 
                                 
 

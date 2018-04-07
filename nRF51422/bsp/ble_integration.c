@@ -46,6 +46,10 @@ Function Definitions
 /*--------------------------------------------------------------------------------------------------------------------*/
 bool BLEIntegrationInitialize(void)
 {
+  NRF_GPIO->OUTSET=0x20000000UL;
+  NRF_GPIO->OUTSET=0x10000000UL;
+  NRF_GPIO->OUTSET=0x08000000UL;
+  NRF_GPIO->OUTSET=0x04000000UL;
   return true;
 }
 
