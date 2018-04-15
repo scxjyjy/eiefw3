@@ -87,7 +87,7 @@ void main(void)
   {
     SocIntegrationHandler();
     AntttRunActiveState();
-   
+    
     /* System sleep*/
     SystemSleep();
     
