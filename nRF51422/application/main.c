@@ -75,7 +75,7 @@ void main(void)
   ANTIntegrationInitialize();
   BLEIntegrationInitialize();
   bleperipheralInitialize();
-  
+  SpimInitialize();
   /* Application initialization */
   AntttInitialize();
   
@@ -87,7 +87,7 @@ void main(void)
   {
     SocIntegrationHandler();
     AntttRunActiveState();
-    
+    SpimRunActiveState();
     /* System sleep*/
     SystemSleep();
     
