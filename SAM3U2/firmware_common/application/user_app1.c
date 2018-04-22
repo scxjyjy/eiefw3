@@ -92,6 +92,15 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  Ssp->pCsGpioAddress=AT91C_BASE_PIOB;
+  Ssp->u32CsPin=22;
+  Ssp->eBitOrder=MSB_FIRST;
+  Ssp->eSpiMode=SPI_SLAVE;
+  Ssp->fnSlaveTxFlowCallback=SlaveTxFlowCallback;
+  Ssp->fnSlaveRxFlowCallback=SlaveRxFlowCallback
+  Ssp->pu8RxBufferAddress=
+  Ssp->ppu8RxNextByte
+  Ssp->u16RxBufferSize
   /* If good initialization, set state to Idle */
   if( 1 )
   {
