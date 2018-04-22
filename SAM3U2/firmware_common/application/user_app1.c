@@ -61,8 +61,8 @@ Variable names shall start with "UserApp1_<type>" and be declared as static.
 ***********************************************************************************************************************/
 static fnCode_type UserApp1_pfStateMachine;               /*!< @brief The state machine function pointer */
 //static u32 UserApp1_u32Timeout;                           /*!< @brief Timeout counter used across states */
-
-
+static u8 u8RxBuffer[128]="";
+static SspConfigurationType *Ssp;
 /**********************************************************************************************************************
 Function Definitions
 **********************************************************************************************************************/
@@ -95,12 +95,13 @@ void UserApp1Initialize(void)
   Ssp->pCsGpioAddress=AT91C_BASE_PIOB;
   Ssp->u32CsPin=22;
   Ssp->eBitOrder=MSB_FIRST;
-  Ssp->eSpiMode=SPI_SLAVE;
+  Ssp->eSspMode=SPI_SLAVE;
   Ssp->fnSlaveTxFlowCallback=SlaveTxFlowCallback;
-  Ssp->fnSlaveRxFlowCallback=SlaveRxFlowCallback
-  Ssp->pu8RxBufferAddress=
-  Ssp->ppu8RxNextByte
-  Ssp->u16RxBufferSize
+  Ssp->fnSlaveRxFlowCallback=SlaveRxFlowCallback;
+  Ssp->pu8RxBufferAddress=u8RxBuffer;
+  Ssp->ppu8RxNextByte=&((Ssp->pu8RxBufferAddress)+1);
+  Ssp->u16RxBufferSize=128;
+  SspRequest(Ssp);
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -149,6 +150,19 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
+   static u8 au8Display[]="                " ;
+   static u8* pu8BufferParser=u8RxBuffer;
+   static u8 u8DisplayIndex=0;
+   static u8 u8ActiveCounter=0;
+   if(pu8BufferParser!=(psRequestedSsp->pBaseAddress->US_RNPR))
+   {
+     /*READ*/
+     au8Display[u8DisplayIndex]=*pu8BufferParser;
+     u8DisplayIndex++;
+     pu8BufferParser++;
+     
+   }
+   DebugPrintf(au8Display);
     
 } /* end UserApp1SM_Idle() */
      
@@ -159,7 +173,16 @@ static void UserApp1SM_Error(void)
 {
   
 } /* end UserApp1SM_Error() */
+void SlaveRxFlowCallback(void)
+{
+ (psRequestedSsp->pBaseAddress->US_RNPR)++;
+  psRequestedSsp->pBaseAddress->US_RNCR = 1;
+}
 
+void SlaveTxFlowCallback(void)
+{
+  
+}
 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
