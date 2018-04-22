@@ -92,6 +92,7 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  Ssp->SspPeripheral=USART1;
   Ssp->pCsGpioAddress=AT91C_BASE_PIOB;
   Ssp->u32CsPin=22;
   Ssp->eBitOrder=MSB_FIRST;
@@ -154,7 +155,7 @@ static void UserApp1SM_Idle(void)
    static u8* pu8BufferParser=u8RxBuffer;
    static u8 u8DisplayIndex=0;
    static u8 u8ActiveCounter=0;
-   if(pu8BufferParser!=(psRequestedSsp->pBaseAddress->US_RNPR))
+   if((&pu8BufferParser)!=(AT91C_BASE_US1->US_RNPR))
    {
      /*READ*/
      au8Display[u8DisplayIndex]=*pu8BufferParser;
@@ -175,8 +176,8 @@ static void UserApp1SM_Error(void)
 } /* end UserApp1SM_Error() */
 void SlaveRxFlowCallback(void)
 {
- (psRequestedSsp->pBaseAddress->US_RNPR)++;
-  psRequestedSsp->pBaseAddress->US_RNCR = 1;
+ (AT91C_BASE_US1->US_RNPR)++;
+  AT91C_BASE_US1->US_RNCR = 1;
 }
 
 void SlaveTxFlowCallback(void)
