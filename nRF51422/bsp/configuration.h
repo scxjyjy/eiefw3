@@ -66,7 +66,7 @@ Includes
 #include "ble_advdata.h"
 #include "ble_srv_common.h"
 #include "bleperipheral_engenuics.h"
-#include "spi-Master.h"
+//#include "spi-Master.h"
 
 /* nRF51422 implementation headers */
 #include "interrupts.h"

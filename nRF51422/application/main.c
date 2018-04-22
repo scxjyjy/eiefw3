@@ -75,9 +75,9 @@ void main(void)
   ANTIntegrationInitialize();
   BLEIntegrationInitialize();
   bleperipheralInitialize();
-  SpimInitialize();
+  //SpimInitialize();
   /* Application initialization */
-  AntttInitialize();
+  //AntttInitialize();
   
   /* Exit initialization */
   G_u32SystemFlags &= ~_SYSTEM_INITIALIZING;
@@ -86,8 +86,8 @@ void main(void)
   while(1)
   {
     SocIntegrationHandler();
-    AntttRunActiveState();
-    SpimRunActiveState();
+    //AntttRunActiveState();
+    //SpimRunActiveState();
     /* System sleep*/
     SystemSleep();
     

@@ -58,6 +58,22 @@ Promises:
 */
 void AntttInitialize(void)
 {
+   /*configure the spi-related pins*/
+  NRF_SPI0 ->PSELSCK=P0_11_;
+  NRF_SPI0 ->PSELMOSI=P0_13_;
+  NRF_SPI0 ->PSELMISO=P0_12_;
+  NRF_SPI0 ->CONFIG=0x00000000UL;
+
+  /*Configure frequency*/
+  NRF51422_SPI0->FREQUENCY=K500;
+
+  /*enable chip*/
+  NRF_GPIO->OUTCLR=0X00000400UL;//10
+  /*initialize set up sucessfully*/
+  LedOn(GREEN);;//GREEN LED
+  /*Disable twi0*/
+  NRF_TWI0->ENABLE=0x00000000UL;
+  NRF_SPI0 ->ENABLE=0x00000001UL;
   Anttt_pfnStateMachine = AntttSM_Idle;
   
 } /* end AntttInitialize() */
@@ -78,6 +94,7 @@ Promises:
 void AntttRunActiveState(void)
 {
   Anttt_pfnStateMachine();
+  
 
 } /* end AntttRunActiveState */
 
@@ -97,8 +114,42 @@ State: AntttSM_Idle
 */
 static void AntttSM_Idle(void)
 {
-    
+  static bool bLedIsOn=true;
+  static u32 u32TxByte=(u32)0x00000055;
+  Putbyte(u32TxByte);
+  if(NRF51422_SPI0->EVENTS_READY)
+  {
+    /*Clear the ready*/
+    NRF51422_SPI0->EVENTS_READY=0;
+    LedOn(BLUE);
+    /*Blink Led*/
+    if(bLedIsOn)
+    {
+      LedOff(BLUE);
+    }
+  }
+  
 } 
+
+
+/*-----()-----*/
+bool Putbyte(u32 TXBYTE )
+{
+  NRF51422_SPI0->TXD=TXBYTE&(0x000000FF);
+  return 1;
+}/*End  putbyte(u32 TXBYTE )*/
+/*-----()-----*/
+void LedOn(LED_Type led)
+{
+  NRF_GPIO->OUTSET|=(1<<led);
+}/*End  LedOff(LED_Type led)*/
+/*-----()-----*/
+void LedOff(LED_Type led)
+{
+  NRF_GPIO->OUTCLR|=(1<<led);
+}/*End  LedOff(LED_Type led)*/
+
+
 
 
 
