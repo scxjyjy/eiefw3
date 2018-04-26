@@ -62,7 +62,9 @@ Variable names shall start with "UserApp1_<type>" and be declared as static.
 static fnCode_type UserApp1_pfStateMachine;               /*!< @brief The state machine function pointer */
 //static u32 UserApp1_u32Timeout;                           /*!< @brief Timeout counter used across states */
 static u8 u8RxBuffer[128]="";
-static SspConfigurationType *Ssp;
+static SspConfigurationType *Sspcfg;
+static SspPeripheralType  *sAvaliablesp;
+static u8* pu8Temp=NULL;
 /**********************************************************************************************************************
 Function Definitions
 **********************************************************************************************************************/
@@ -92,17 +94,20 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
-  Ssp->SspPeripheral=USART1;
-  Ssp->pCsGpioAddress=AT91C_BASE_PIOB;
-  Ssp->u32CsPin=22;
-  Ssp->eBitOrder=MSB_FIRST;
-  Ssp->eSspMode=SPI_SLAVE;
-  Ssp->fnSlaveTxFlowCallback=SlaveTxFlowCallback;
-  Ssp->fnSlaveRxFlowCallback=SlaveRxFlowCallback;
-  Ssp->pu8RxBufferAddress=u8RxBuffer;
-  Ssp->ppu8RxNextByte=&((Ssp->pu8RxBufferAddress)+1);
-  Ssp->u16RxBufferSize=128;
-  SspRequest(Ssp);
+  
+  Sspcfg->SspPeripheral=USART2;
+  Sspcfg->pCsGpioAddress=AT91C_BASE_PIOB;
+  Sspcfg->u32CsPin=22;
+  Sspcfg->eBitOrder=MSB_FIRST;
+  Sspcfg->eSspMode=SPI_SLAVE;
+  Sspcfg->fnSlaveTxFlowCallback=SlaveTxFlowCallback;
+  Sspcfg->fnSlaveRxFlowCallback=SlaveRxFlowCallback;
+  Sspcfg->pu8RxBufferAddress=u8RxBuffer;
+  pu8Temp=Sspcfg->pu8RxBufferAddress;
+  pu8Temp++;
+  Sspcfg->ppu8RxNextByte=&(pu8Temp);
+  Sspcfg->u16RxBufferSize=128;
+  sAvaliablesp=SspRequest(Sspcfg);
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -151,19 +156,28 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
-   static u8 au8Display[]="                " ;
+   static u8 au8Display[13]="          \n" ;
    static u8* pu8BufferParser=u8RxBuffer;
    static u8 u8DisplayIndex=0;
    static u8 u8ActiveCounter=0;
-   if((&pu8BufferParser)!=(AT91C_BASE_US1->US_RNPR))
+   if((pu8BufferParser)!=(*(sAvaliablesp->ppu8RxNextByte)))
    {
      /*READ*/
      au8Display[u8DisplayIndex]=*pu8BufferParser;
      u8DisplayIndex++;
      pu8BufferParser++;
-     
+     u8ActiveCounter++; 
    }
-   DebugPrintf(au8Display);
+   if(u8DisplayIndex>12)
+   {
+     u8DisplayIndex=0;
+   }
+   if(u8ActiveCounter>0)
+   {
+     u8ActiveCounter=0;
+     LedToggle(GREEN);
+   }
+   
     
 } /* end UserApp1SM_Idle() */
      
@@ -176,8 +190,14 @@ static void UserApp1SM_Error(void)
 } /* end UserApp1SM_Error() */
 void SlaveRxFlowCallback(void)
 {
- (AT91C_BASE_US1->US_RNPR)++;
-  AT91C_BASE_US1->US_RNCR = 1;
+  sAvaliablesp->pu8RxBuffer++; 
+  *(sAvaliablesp->ppu8RxNextByte)++;
+  if(*(sAvaliablesp->ppu8RxNextByte)==(u8RxBuffer+sAvaliablesp->u16RxBufferSize))
+  {
+    sAvaliablesp->pu8RxBuffer=u8RxBuffer;
+    pu8Temp=u8RxBuffer+1;
+    sAvaliablesp->ppu8RxNextByte=&(pu8Temp);
+  }
 }
 
 void SlaveTxFlowCallback(void)
