@@ -63,7 +63,7 @@ static fnCode_type UserApp1_pfStateMachine;               /*!< @brief The state 
 //static u32 UserApp1_u32Timeout;                           /*!< @brief Timeout counter used across states */
 static u8 u8RxBuffer[128]="";
 
-static SspPeripheralType  *sAvaliablesp;
+static SspPeripheralType  *psAvaliablesp;
 static u8* pu8Temp=NULL;
 static u8* pu8RXNextbyte=u8RxBuffer;
 /**********************************************************************************************************************
@@ -103,14 +103,15 @@ void UserApp1Initialize(void)
   Sspcfg.eSspMode=SPI_SLAVE;
   Sspcfg.fnSlaveTxFlowCallback=SlaveTxFlowCallback;
   Sspcfg.fnSlaveRxFlowCallback=SlaveRxFlowCallback;
-  Sspcfg.pu8RxBufferAddress=u8RxBuffer;
+  Sspcfg.pu8RxBufferAddress=pu8RXNextbyte;
   pu8Temp=Sspcfg.pu8RxBufferAddress;
-  pu8Temp++;
-  Sspcfg.ppu8RxNextByte=&(pu8Temp);
-  Sspcfg.u16RxBufferSize=128;
-  sAvaliablesp=SspRequest(&Sspcfg);
+  //pu8Temp++;
+  //Sspcfg.ppu8RxNextByte=&(pu8Temp);
+  Sspcfg.ppu8RxNextByte=&(pu8RXNextbyte);
+  Sspcfg.u16RxBufferSize=20;
+  psAvaliablesp=SspRequest(&Sspcfg);
   /* If good initialization, set state to Idle */
-  if( 1 )
+  if(  psAvaliablesp!=NULL )
   {
     UserApp1_pfStateMachine = UserApp1SM_Idle;
   }
@@ -178,7 +179,25 @@ static void UserApp1SM_Idle(void)
      u8ActiveCounter=0;
      LedToggle(GREEN);
    }
-   
+   if(WasButtonPressed(BUTTON0))
+   {
+     ButtonAcknowledge(BUTTON0);
+     SspWriteByte(psAvaliablesp, 0X00000011);
+     LedToggle(BLUE);
+   }
+   if(WasButtonPressed(BUTTON1))
+   {
+     ButtonAcknowledge(BUTTON1);
+     SspWriteByte(psAvaliablesp, 0X00000022);
+     LedToggle(RED);
+   }
+   if(WasButtonPressed(BUTTON2))
+   {
+     ButtonAcknowledge(BUTTON2);
+     SspWriteByte(psAvaliablesp, 0X00000033);
+     LedToggle(YELLOW);
+   }
+  
     
 } /* end UserApp1SM_Idle() */
      
@@ -192,17 +211,20 @@ static void UserApp1SM_Error(void)
 void SlaveRxFlowCallback(void)
 {
   pu8RXNextbyte++;
-  if(pu8RXNextbyte==(u8RxBuffer+sAvaliablesp->u16RxBufferSize))
+  if(pu8RXNextbyte==(u8RxBuffer+psAvaliablesp->u16RxBufferSize))
   {
-    sAvaliablesp->pu8RxBuffer=u8RxBuffer;
+    psAvaliablesp->pu8RxBuffer=u8RxBuffer;
     pu8RXNextbyte=u8RxBuffer;
   }
+  
 }
 
 void SlaveTxFlowCallback(void)
 {
   
 }
+
+
 
 
 /*--------------------------------------------------------------------------------------------------------------------*/

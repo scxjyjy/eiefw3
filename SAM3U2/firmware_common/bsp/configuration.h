@@ -915,7 +915,7 @@ SPI slave mode to communicate with an ANT device.
 
 
 /* USART Interrupt Enable Register - Page 741 */
-#define ANT_US_IER_INIT (u32)0x000800001
+#define ANT_US_IER_INIT (u32)0x00080001
 /*
     31 [0] Reserved
     30 [0] "
