@@ -86,7 +86,7 @@ void main(void)
   while(1)
   {
     SocIntegrationHandler();
-    //AntttRunActiveState();
+    AntttRunActiveState();
     //SpimRunActiveState();
     /* System sleep*/
     SystemSleep();
