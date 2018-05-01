@@ -80,7 +80,7 @@ void main(void)
 #if  Enablesoftdevice
   bleperipheralInitialize();
 #endif
-  //SpimInitialize();
+  SpimInitialize();
   /* Application initialization */
   AntttInitialize();
   
@@ -92,7 +92,7 @@ void main(void)
   {
     SocIntegrationHandler();
     AntttRunActiveState();
-    //SpimRunActiveState();
+    SpimRunActiveState();
     /* System sleep*/
     SystemSleep();
     

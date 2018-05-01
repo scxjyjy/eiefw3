@@ -58,6 +58,7 @@ Promises:
 */
 void AntttInitialize(void)
 {
+#if 0
    /*configure the spi-related pins*/
   NRF_SPI0 ->PSELSCK=P0_11_;
   NRF_SPI0 ->PSELMOSI=P0_13_;
@@ -75,8 +76,9 @@ void AntttInitialize(void)
   /*Disable twi0*/
   NRF_TWI0->ENABLE=0x00000000UL;
   NRF_SPI0 ->ENABLE=0x00000001UL;
+  #endif
   Anttt_pfnStateMachine = AntttSM_Idle;
-  
+
 } /* end AntttInitialize() */
 
 
@@ -113,8 +115,10 @@ void AntttRunActiveState(void)
 /*--------------------------------------------------------------------------------------------------------------------
 State: AntttSM_Idle
 */
+
 static void AntttSM_Idle(void)
 {
+#if 0
   static bool bLedIsOn=false;
   static u32 u32RXBuffer=0x00000000UL;
   u8 a=0;
@@ -143,10 +147,10 @@ static void AntttSM_Idle(void)
   {
     for(u16 a=0;a<1000;a++);
   }
-    
+ #endif  
 } 
 
-
+#if 0
 /*-----()-----*/
 bool Putbyte(u32 TXBYTE )
 {
@@ -163,7 +167,7 @@ void LedOff(LED_Type led)
 {
   NRF_GPIO->OUTCLR|=(1<<led);
 }/*End  LedOff(LED_Type led)*/
-
+#endif   
 
 
 
