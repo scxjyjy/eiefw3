@@ -61,11 +61,9 @@ bool InterruptsInitialize(void)
 #else
   
   u32 u32Result = NRF_SUCCESS;
-  
   // Must enable the SoftDevice Interrupt first.
   u32Result |= sd_nvic_SetPriority(SD_EVT_IRQn, NRF_APP_PRIORITY_LOW);
   u32Result |= sd_nvic_EnableIRQ(SD_EVT_IRQn);
-  
   return (u32Result == NRF_SUCCESS);
 #endif
 

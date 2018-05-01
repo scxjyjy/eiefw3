@@ -71,6 +71,7 @@ void AntttInitialize(void)
   NRF_GPIO->OUTCLR=0X00000400UL;//10
   /*initialize set up sucessfully*/
   LedOn(GREEN);;//GREEN LED
+  LedOff(BLUE);
   /*Disable twi0*/
   NRF_TWI0->ENABLE=0x00000000UL;
   NRF_SPI0 ->ENABLE=0x00000001UL;
@@ -114,21 +115,35 @@ State: AntttSM_Idle
 */
 static void AntttSM_Idle(void)
 {
-  static bool bLedIsOn=true;
+  static bool bLedIsOn=false;
+  static u32 u32RXBuffer=0x00000000UL;
+  u8 a=0;
   static u32 u32TxByte=(u32)0x00000055;
-  Putbyte(u32TxByte);
+  a=Putbyte(u32TxByte);
+  ReadByte(u32RXBuffer);
   if(NRF51422_SPI0->EVENTS_READY)
   {
     /*Clear the ready*/
     NRF51422_SPI0->EVENTS_READY=0;
-    LedOn(BLUE);
     /*Blink Led*/
+    
     if(bLedIsOn)
     {
       LedOff(BLUE);
+      bLedIsOn=false;
+    }
+    else
+    {
+      LedOn(BLUE);
+      bLedIsOn=true;
     }
   }
   
+  for(u16 i=0;i<1000;i++)
+  {
+    for(u16 a=0;a<1000;a++);
+  }
+    
 } 
 
 
@@ -148,7 +163,6 @@ void LedOff(LED_Type led)
 {
   NRF_GPIO->OUTCLR|=(1<<led);
 }/*End  LedOff(LED_Type led)*/
-
 
 
 

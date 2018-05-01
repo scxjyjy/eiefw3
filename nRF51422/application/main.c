@@ -60,10 +60,12 @@ void main(void)
   
   // Enable the s310 SoftDevice Stack. If Failure, we shall not progress as 
   // successive code is dependent on SD success.
+
   if (!SocIntegrationInitialize())
   {
     while (1);
   }
+
   
   /* Low Level Initialization Modules */
   WatchDogSetup(); /* During development, set to not reset processor if timeout */
@@ -73,11 +75,14 @@ void main(void)
   /* Driver initialization */
 
   ANTIntegrationInitialize();
+    
   BLEIntegrationInitialize();
+#if  Enablesoftdevice
   bleperipheralInitialize();
+#endif
   //SpimInitialize();
   /* Application initialization */
-  //AntttInitialize();
+  AntttInitialize();
   
   /* Exit initialization */
   G_u32SystemFlags &= ~_SYSTEM_INITIALIZING;

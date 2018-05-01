@@ -25,6 +25,9 @@ Constants / Definitions
 #define M2    0x20000000UL
 #define M4    0x40000000UL
 #define M8    0x80000000UL
+#define  ReadByte(u32RXBuffer)  u32RXBuffer=NRF51422_SPI0->RXD
+
+
 /*SPI Peripheral BaseAddress,it will name as <product name>_<peripherial name>_Base*/
 #define NRF51422_SPI1_BASE 0x40004000UL
 #define NRF51422_SPI0_BASE 0x40003000UL
