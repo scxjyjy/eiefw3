@@ -61,11 +61,11 @@ Variable names shall start with "UserApp1_<type>" and be declared as static.
 ***********************************************************************************************************************/
 static fnCode_type UserApp1_pfStateMachine;               /*!< @brief The state machine function pointer */
 //static u32 UserApp1_u32Timeout;                           /*!< @brief Timeout counter used across states */
-static u8 u8RxBuffer[128]="";
+static u8 u8RxBuffer[128]="\0";
 
 static SspPeripheralType  *psAvaliablesp;
 static u8* pu8Temp=NULL;
-static u8* pu8RXNextbyte=u8RxBuffer;
+static u8* pu8RXNextbyte=&u8RxBuffer[0];
 /**********************************************************************************************************************
 Function Definitions
 **********************************************************************************************************************/
@@ -100,7 +100,7 @@ void UserApp1Initialize(void)
   Sspcfg.pCsGpioAddress=AT91C_BASE_PIOB;
   Sspcfg.u32CsPin=22;
   Sspcfg.eBitOrder=MSB_FIRST;
-  Sspcfg.eSspMode=SPI_SLAVE;
+  Sspcfg.eSspMode=SPI_SLAVE_FLOW_CONTROL;
   Sspcfg.fnSlaveTxFlowCallback=SlaveTxFlowCallback;
   Sspcfg.fnSlaveRxFlowCallback=SlaveRxFlowCallback;
   Sspcfg.pu8RxBufferAddress=pu8RXNextbyte;
@@ -108,7 +108,7 @@ void UserApp1Initialize(void)
   //pu8Temp++;
   //Sspcfg.ppu8RxNextByte=&(pu8Temp);
   Sspcfg.ppu8RxNextByte=&(pu8RXNextbyte);
-  Sspcfg.u16RxBufferSize=20;
+  Sspcfg.u16RxBufferSize=RxBufferMaxSize;
   psAvaliablesp=SspRequest(&Sspcfg);
   /* If good initialization, set state to Idle */
   if(  psAvaliablesp!=NULL )
@@ -162,18 +162,23 @@ static void UserApp1SM_Idle(void)
    static u8* pu8BufferParser=u8RxBuffer;
    static u8 u8DisplayIndex=0;
    static u8 u8ActiveCounter=0;
-   if((pu8BufferParser)!=(pu8RXNextbyte))
+   while((pu8BufferParser)!=(pu8RXNextbyte))
    {
      /*READ*/
      au8Display[u8DisplayIndex]=*pu8BufferParser;
      u8DisplayIndex++;
      pu8BufferParser++;
      u8ActiveCounter++; 
+     if((pu8BufferParser)>=(&u8RxBuffer[RxBufferMaxSize]))
+     {
+       pu8BufferParser=&u8RxBuffer[0];
+     }
+     if(u8DisplayIndex>11)
+     {
+      u8DisplayIndex=0;
+     }
    }
-   if(u8DisplayIndex>12)
-   {
-     u8DisplayIndex=0;
-   }
+   
    if(u8ActiveCounter>0)
    {
      u8ActiveCounter=0;
@@ -213,8 +218,7 @@ void SlaveRxFlowCallback(void)
   pu8RXNextbyte++;
   if(pu8RXNextbyte==(u8RxBuffer+psAvaliablesp->u16RxBufferSize))
   {
-    psAvaliablesp->pu8RxBuffer=u8RxBuffer;
-    pu8RXNextbyte=u8RxBuffer;
+    pu8RXNextbyte=&u8RxBuffer[0];
   }
   
 }
