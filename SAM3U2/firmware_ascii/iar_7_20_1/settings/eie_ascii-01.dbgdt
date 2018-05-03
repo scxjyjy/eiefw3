@@ -71,7 +71,7 @@
         <expressions>
           
           
-        <item>G_u32SystemTime1ms</item><item>psSspConfig_-&gt;SspPeripheral</item><item>USART2</item><item>Sspcfg</item><item>u8RxBuffer</item><item>Sspcfg.ppu8RxNextByte</item><item>Sspcfg.pu8RxBufferAddress</item><item>pu8RXNextbyte</item><item>psAvaliablesp</item><item>psRequestedSsp-&gt;ppu8RxNextByte</item><item></item></expressions>
+        <item>G_u32SystemTime1ms</item><item>psSspConfig_-&gt;SspPeripheral</item><item>USART2</item><item>Sspcfg</item><item>u8RxBuffer</item><item>Sspcfg.ppu8RxNextByte</item><item>Sspcfg.pu8RxBufferAddress</item><item>pu8RXNextbyte</item><item>psAvaliablesp</item><item>psRequestedSsp-&gt;ppu8RxNextByte</item><item/></expressions>
         <col-names>
           
           
@@ -88,7 +88,7 @@
       <WATCH_2>
         <expressions>
           
-        <item>au8Display</item><item>**(SSP_psCurrentISR-&gt;ppu8RxNextByte)</item><item>(u8)u32Byte</item><item>*(SSP_psCurrentISR-&gt;ppu8RxNextByte)</item><item>pu8RXNextbyte</item><item>SSP_psCurrentISR</item><item>&amp;(pu8RXNextbyte)</item><item></item></expressions>
+        <item>au8Display</item><item>**(SSP_psCurrentISR-&gt;ppu8RxNextByte)</item><item>(u8)u32Byte</item><item>*(SSP_psCurrentISR-&gt;ppu8RxNextByte)</item><item>pu8RXNextbyte</item><item>SSP_psCurrentISR</item><item>&amp;(pu8RXNextbyte)</item><item/></expressions>
         <col-names>
           
           
