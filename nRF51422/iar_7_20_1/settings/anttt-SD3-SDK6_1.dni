@@ -20,7 +20,7 @@ Stop=1
 Freq=10000000
 MultiCoreRunAll=1
 [DebugChecksum]
-Checksum=1778225672
+Checksum=-10417094
 [CodeCoverage]
 Enabled=_ 0
 [Exceptions]
@@ -53,7 +53,8 @@ ITMportsTermIO=0
 ITMportsLogFile=0
 ITMlogFile=$PROJ_DIR$\ITM.log
 [watch_formats]
-Fmt0={W}1:a	3	0
+Fmt0={W}1:SpiM_u32RXBuffer	4	0
+Fmt1={W}1:a	3	0
 [SWOTraceWindow]
 PcSampling=0
 InterruptLogs=0

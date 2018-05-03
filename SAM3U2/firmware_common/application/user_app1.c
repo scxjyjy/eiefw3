@@ -162,6 +162,7 @@ static void UserApp1SM_Idle(void)
    static u8* pu8BufferParser=u8RxBuffer;
    static u8 u8DisplayIndex=0;
    static u8 u8ActiveCounter=0;
+#if 0
    while((pu8BufferParser)!=(pu8RXNextbyte))
    {
      /*READ*/
@@ -184,22 +185,23 @@ static void UserApp1SM_Idle(void)
      u8ActiveCounter=0;
      LedToggle(GREEN);
    }
+#endif
    if(WasButtonPressed(BUTTON0))
    {
      ButtonAcknowledge(BUTTON0);
-     SspWriteByte(psAvaliablesp, 0X00000011);
+     SspWriteByte(psAvaliablesp, (u8)0x11);
      LedToggle(BLUE);
    }
    if(WasButtonPressed(BUTTON1))
    {
      ButtonAcknowledge(BUTTON1);
-     SspWriteByte(psAvaliablesp, 0X00000022);
+     SspWriteByte(psAvaliablesp, (u8)0x22);
      LedToggle(RED);
    }
    if(WasButtonPressed(BUTTON2))
    {
      ButtonAcknowledge(BUTTON2);
-     SspWriteByte(psAvaliablesp, 0X00000033);
+     SspWriteByte(psAvaliablesp, (u8)0x33);
      LedToggle(YELLOW);
    }
   
