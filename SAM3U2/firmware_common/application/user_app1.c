@@ -99,14 +99,14 @@ void UserApp1Initialize(void)
   Sspcfg.SspPeripheral=USART2;
   Sspcfg.pCsGpioAddress=AT91C_BASE_PIOB;
   Sspcfg.u32CsPin=22;
-  Sspcfg.eBitOrder=MSB_FIRST;
+  Sspcfg.eBitOrder=LSB_FIRST;
   Sspcfg.eSspMode=SPI_SLAVE_FLOW_CONTROL;
   Sspcfg.fnSlaveTxFlowCallback=SlaveTxFlowCallback;
   Sspcfg.fnSlaveRxFlowCallback=SlaveRxFlowCallback;
   Sspcfg.pu8RxBufferAddress=pu8RXNextbyte;
   pu8Temp=Sspcfg.pu8RxBufferAddress;
   //pu8Temp++;
-  //Sspcfg.ppu8RxNextByte=&(pu8Temp);
+  //Sspcfg.ppu8RxNextByte=&(pu8T emp);
   Sspcfg.ppu8RxNextByte=&(pu8RXNextbyte);
   Sspcfg.u16RxBufferSize=RxBufferMaxSize;
   psAvaliablesp=SspRequest(&Sspcfg);
@@ -162,7 +162,7 @@ static void UserApp1SM_Idle(void)
    static u8* pu8BufferParser=u8RxBuffer;
    static u8 u8DisplayIndex=0;
    static u8 u8ActiveCounter=0;
-#if 0
+#if 1
    while((pu8BufferParser)!=(pu8RXNextbyte))
    {
      /*READ*/
@@ -189,19 +189,25 @@ static void UserApp1SM_Idle(void)
    if(WasButtonPressed(BUTTON0))
    {
      ButtonAcknowledge(BUTTON0);
-     SspWriteByte(psAvaliablesp, (u8)0x11);
+     SspWriteByte(psAvaliablesp, (u8)0x01);
      LedToggle(BLUE);
    }
    if(WasButtonPressed(BUTTON1))
    {
      ButtonAcknowledge(BUTTON1);
-     SspWriteByte(psAvaliablesp, (u8)0x22);
+     SspWriteByte(psAvaliablesp, (u8)0x21);
      LedToggle(RED);
    }
    if(WasButtonPressed(BUTTON2))
    {
      ButtonAcknowledge(BUTTON2);
-     SspWriteByte(psAvaliablesp, (u8)0x33);
+     SspWriteByte(psAvaliablesp, (u8)0x01);
+     LedToggle(YELLOW);
+   }
+   if(WasButtonPressed(BUTTON3))
+   {
+     ButtonAcknowledge(BUTTON3);
+     SspWriteByte(psAvaliablesp, (u8)0x41);
      LedToggle(YELLOW);
    }
   
