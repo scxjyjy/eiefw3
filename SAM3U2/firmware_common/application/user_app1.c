@@ -195,19 +195,19 @@ static void UserApp1SM_Idle(void)
    if(WasButtonPressed(BUTTON1))
    {
      ButtonAcknowledge(BUTTON1);
-     SspWriteByte(psAvaliablesp, (u8)0x21);
+     SspWriteByte(psAvaliablesp, (u8)0x02);
      LedToggle(RED);
    }
    if(WasButtonPressed(BUTTON2))
    {
      ButtonAcknowledge(BUTTON2);
-     SspWriteByte(psAvaliablesp, (u8)0x01);
+     SspWriteByte(psAvaliablesp, (u8)0x03);
      LedToggle(YELLOW);
    }
    if(WasButtonPressed(BUTTON3))
    {
      ButtonAcknowledge(BUTTON3);
-     SspWriteByte(psAvaliablesp, (u8)0x41);
+     SspWriteByte(psAvaliablesp, (u8)0x04);
      LedToggle(YELLOW);
    }
   
