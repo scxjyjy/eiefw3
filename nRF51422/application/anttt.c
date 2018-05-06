@@ -97,7 +97,6 @@ Promises:
 void AntttRunActiveState(void)
 {
   Anttt_pfnStateMachine();
-  
 
 } /* end AntttRunActiveState */
 

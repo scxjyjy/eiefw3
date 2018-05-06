@@ -71,7 +71,7 @@
         <expressions>
           
           
-        <item>G_u32SystemTime1ms</item><item>psSspConfig_-&gt;SspPeripheral</item><item>USART2</item><item>Sspcfg</item><item>u8RxBuffer</item><item>Sspcfg.ppu8RxNextByte</item><item>Sspcfg.pu8RxBufferAddress</item><item>pu8RXNextbyte</item><item>psAvaliablesp</item><item>psRequestedSsp-&gt;ppu8RxNextByte</item><item></item></expressions>
+        <item>G_u32SystemTime1ms</item><item>psSspConfig_-&gt;SspPeripheral</item><item>USART2</item><item>Sspcfg</item><item>u8RxBuffer</item><item>Sspcfg.ppu8RxNextByte</item><item>Sspcfg.pu8RxBufferAddress</item><item>pu8RXNextbyte</item><item>psAvaliablesp</item><item>psRequestedSsp-&gt;ppu8RxNextByte</item><item/></expressions>
         <col-names>
           
           
