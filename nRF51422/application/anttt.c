@@ -30,7 +30,7 @@ Global variable definitions with scope limited to this local application.
 Variable names shall start with "Anttt_<type>" and be declared as static.
 ***********************************************************************************************************************/
 static fnCode_type Anttt_pfnStateMachine;              /* The application state machine function pointer */
-
+static u32 Anttt_u32RXBuffer=0x00000000UL;
 
 
 /**********************************************************************************************************************
@@ -58,12 +58,12 @@ Promises:
 */
 void AntttInitialize(void)
 {
-#if 0
+#if 1
    /*configure the spi-related pins*/
-  NRF_SPI0 ->PSELSCK=P0_11_;
-  NRF_SPI0 ->PSELMOSI=P0_13_;
-  NRF_SPI0 ->PSELMISO=P0_12_;
-  NRF_SPI0 ->CONFIG=0x00000000UL;
+  NRF_SPI0 ->PSELSCK=11;
+  NRF_SPI0 ->PSELMOSI=13;
+  NRF_SPI0 ->PSELMISO=12;
+  NRF_SPI0 ->CONFIG=0x00000007UL;
 
   /*Configure frequency*/
   NRF51422_SPI0->FREQUENCY=K500;
@@ -117,13 +117,11 @@ State: AntttSM_Idle
 
 static void AntttSM_Idle(void)
 {
-#if 0
+#if 1
   static bool bLedIsOn=false;
-  static u32 u32RXBuffer=0x00000000UL;
-  u8 a=0;
-  static u32 u32TxByte=(u32)0x00000055;
-  a=Putbyte(u32TxByte);
-  ReadByte(u32RXBuffer);
+  u32 u32TxByte=0x00000001UL;
+  Putbyte(u32TxByte);
+  ReadByte(Anttt_u32RXBuffer);
   if(NRF51422_SPI0->EVENTS_READY)
   {
     /*Clear the ready*/
@@ -141,15 +139,22 @@ static void AntttSM_Idle(void)
       bLedIsOn=true;
     }
   }
-  
-  for(u16 i=0;i<1000;i++)
+  switch(Anttt_u32RXBuffer)
+  {
+   case 0x00000001:LedOn(GREEN);break;
+   case 0x00000002:LedOn(YELLOW);break;
+   case 0x00000003:LedOn(RED);break;
+   case 0x00000004:LedOn(RED);break;
+  default:;
+  }
+  for(u16 i=0;i<100;i++)
   {
     for(u16 a=0;a<1000;a++);
   }
  #endif  
 } 
 
-#if 0
+#if 1
 /*-----()-----*/
 bool Putbyte(u32 TXBYTE )
 {
@@ -159,13 +164,18 @@ bool Putbyte(u32 TXBYTE )
 /*-----()-----*/
 void LedOn(LED_Type led)
 {
-  NRF_GPIO->OUTSET|=(1<<led);
+  NRF_GPIO->OUT|=(1<<led);
 }/*End  LedOff(LED_Type led)*/
 /*-----()-----*/
 void LedOff(LED_Type led)
 {
-  NRF_GPIO->OUTCLR|=(1<<led);
+  NRF_GPIO->OUT&=(0<<led);
 }/*End  LedOff(LED_Type led)*/
+
+void LedToggle(LED_Type led)
+{
+  NRF_GPIO->OUT^=(1<<led);
+}
 #endif   
 
 

@@ -132,7 +132,6 @@ Promises:
 void GPIOTE_IRQHandler(void)
 {
   LedOn(RED);
-
 } /* end GPIOTE_IRQHandler() */
 
 

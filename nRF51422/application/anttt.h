@@ -18,7 +18,7 @@ Constants / Definitions
 
 #define ANTTT_COMMAND_ID_MOVE           (u8)0xCC
 #define ANTTT_COMMAND_ID_MOVE_RESP      (u8)0xAC 
-#if 0
+#if 1
 #define K125  0x02000000UL
 #define K250  0x04000000UL
 #define K500  0x08000000UL
@@ -41,7 +41,7 @@ Constants / Definitions
 /**********************************************************************************************************************
 Type Definitions
 **********************************************************************************************************************/
-#if 0
+#if 1
 typedef volatile unsigned long U32NRF51;
 typedef struct
 {
@@ -76,10 +76,11 @@ Function Declarations
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Public functions                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
-#if 0
+#if 1
 bool Putbyte(u32 TXBYTE );
 void LedOn(LED_Type led);
 void LedOff(LED_Type led);
+void LedToggle(LED_Type led);
 #endif
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
