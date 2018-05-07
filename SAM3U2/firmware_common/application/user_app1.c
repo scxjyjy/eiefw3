@@ -189,6 +189,11 @@ static void UserApp1SM_Idle(void)
    if(WasButtonPressed(BUTTON0))
    {
      ButtonAcknowledge(BUTTON0);
+     /*generate falling edge*/
+     AT91C_BASE_PIOB->PIO_SODR=(1<<US_RTS2_PB24);
+     for(u8 i=0;i<=100;i++);
+     AT91C_BASE_PIOB->PIO_CODR=(1<<US_RTS2_PB24);
+     
      SspWriteByte(psAvaliablesp, (u8)0x01);
      LedToggle(BLUE);
    }

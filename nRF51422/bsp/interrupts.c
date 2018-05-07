@@ -54,7 +54,7 @@ Promises:
 */
 bool InterruptsInitialize(void)
 {
-#define SD_PRESENT 0
+#define SD_PRESENT 1
   
 #ifndef SD_PRESENT  
 
@@ -65,7 +65,7 @@ bool InterruptsInitialize(void)
   u32Result |= sd_nvic_SetPriority(SD_EVT_IRQn, NRF_APP_PRIORITY_LOW);
   u32Result |= sd_nvic_EnableIRQ(SD_EVT_IRQn);
   u32Result |= sd_nvic_SetPriority(GPIOTE_IRQn , NRF_APP_PRIORITY_LOW);
-  u32Result |= sd_nvic_EnableIRQ(GPIOTE_IRQn );
+  //u32Result |= sd_nvic_EnableIRQ(GPIOTE_IRQn );
   return (u32Result == NRF_SUCCESS);
 #endif
 
@@ -134,6 +134,22 @@ void GPIOTE_IRQHandler(void)
   LedOn(RED);
 } /* end GPIOTE_IRQHandler() */
 
+/*--------------------------------------------------------------------------------------------------------------------
+Interrupt handler: SPI0_TWI0_IRQHandler
+
+Description:
+Processes SPI0£¬TWI0 Events such as Pin and Port InterruptsB
+
+Requires:
+  - Enabled via sd_nvic_XXX
+
+Promises:
+  - Handles the SPI0_TWI0 events for the enabled pins. 
+*/
+void SPI0_TWI0_IRQHandler(void)
+{
+  LedOn(RED);
+} /* end GPIOTE_IRQHandler() */
 
 
 

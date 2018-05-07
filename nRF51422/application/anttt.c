@@ -119,7 +119,7 @@ static void AntttSM_Idle(void)
 {
 #if 1
   static bool bLedIsOn=false;
-  u32 u32TxByte=0x00000001UL;
+  u32 u32TxByte=0x00000051UL;
   Putbyte(u32TxByte);
   ReadByte(Anttt_u32RXBuffer);
   if(NRF51422_SPI0->EVENTS_READY)
@@ -141,10 +141,10 @@ static void AntttSM_Idle(void)
   }
   switch(Anttt_u32RXBuffer)
   {
-   case 0x00000001:LedOn(GREEN);break;
-   case 0x00000002:LedOn(YELLOW);break;
-   case 0x00000003:LedOn(RED);break;
-   case 0x00000004:LedOn(RED);break;
+   case 0x00000001:LedToggle(GREEN);break;
+   case 0x00000002:LedToggle(YELLOW);break;
+   case 0x00000003:LedToggle(RED);break;
+   case 0x00000004:LedToggle(RED);break;
   default:;
   }
   for(u16 i=0;i<100;i++)
@@ -169,7 +169,7 @@ void LedOn(LED_Type led)
 /*-----()-----*/
 void LedOff(LED_Type led)
 {
-  NRF_GPIO->OUT&=(0<<led);
+  NRF_GPIO->OUTCLR=(1<<led);
 }/*End  LedOff(LED_Type led)*/
 
 void LedToggle(LED_Type led)
