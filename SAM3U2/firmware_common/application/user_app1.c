@@ -95,6 +95,10 @@ Promises:
 */
 void UserApp1Initialize(void)
 { 
+//  AT91C_BASE_PIOB->PIO_OER=(1<<21);
+//  AT91C_BASE_PIOB->PIO_CODR=(1<<21);
+//  for(u8 i=0;i<=100;i++);
+//  AT91C_BASE_PIOB->PIO_SODR=(1<<21);
   SspConfigurationType Sspcfg;
   Sspcfg.SspPeripheral=USART2;
   Sspcfg.pCsGpioAddress=AT91C_BASE_PIOB;
@@ -110,9 +114,11 @@ void UserApp1Initialize(void)
   Sspcfg.ppu8RxNextByte=&(pu8RXNextbyte);
   Sspcfg.u16RxBufferSize=RxBufferMaxSize;
   psAvaliablesp=SspRequest(&Sspcfg);
+  //AT91C_BASE_US2->
   /* If good initialization, set state to Idle */
   if(  psAvaliablesp!=NULL )
   {
+   
     UserApp1_pfStateMachine = UserApp1SM_Idle;
   }
   else
@@ -200,19 +206,19 @@ static void UserApp1SM_Idle(void)
    if(WasButtonPressed(BUTTON1))
    {
      ButtonAcknowledge(BUTTON1);
-     SspWriteByte(psAvaliablesp, (u8)0x02);
+     SspWriteByte(psAvaliablesp, (u8)0x10);
      LedToggle(RED);
    }
    if(WasButtonPressed(BUTTON2))
    {
      ButtonAcknowledge(BUTTON2);
-     SspWriteByte(psAvaliablesp, (u8)0x03);
+     SspWriteByte(psAvaliablesp, (u8)0x30);
      LedToggle(YELLOW);
    }
    if(WasButtonPressed(BUTTON3))
    {
      ButtonAcknowledge(BUTTON3);
-     SspWriteByte(psAvaliablesp, (u8)0x04);
+     SspWriteByte(psAvaliablesp, (u8)0x40);
      LedToggle(YELLOW);
    }
   

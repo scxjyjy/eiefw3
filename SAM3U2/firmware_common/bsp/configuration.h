@@ -870,7 +870,7 @@ SPI slave mode to communicate with an ANT device.
 */
 
 /* USART Mode Register - page 737 */
-#define ANT_US_MR_INIT (u32)0x004118FF
+#define ANT_US_MR_INIT (u32)0x004119FF
 /*
     31 [0] ONEBIT start frame delimiter is COMMAND or DATA SYNC
     30 [0] MODSYNC Manchester start bit N/A

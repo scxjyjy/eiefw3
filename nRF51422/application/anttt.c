@@ -63,10 +63,10 @@ void AntttInitialize(void)
   NRF_SPI0 ->PSELSCK=11;
   NRF_SPI0 ->PSELMOSI=13;
   NRF_SPI0 ->PSELMISO=12;
-  NRF_SPI0 ->CONFIG=0x00000007UL;
+  NRF_SPI0 ->CONFIG=0x00000003UL;
 
   /*Configure frequency*/
-  NRF51422_SPI0->FREQUENCY=K500;
+  NRF51422_SPI0->FREQUENCY=K125;
 
   /*enable chip*/
   NRF_GPIO->OUTCLR=0X00000400UL;//10
@@ -77,7 +77,12 @@ void AntttInitialize(void)
   NRF_TWI0->ENABLE=0x00000000UL;
   NRF_SPI0 ->ENABLE=0x00000001UL;
   #endif
+  for(u16 i=0;i<1000;i++)
+  {
+    for(u16 a=0;a<10000;a++);
+  }
   Anttt_pfnStateMachine = AntttSM_Idle;
+  
 
 } /* end AntttInitialize() */
 
@@ -119,13 +124,13 @@ static void AntttSM_Idle(void)
 {
 #if 1
   static bool bLedIsOn=false;
-  u32 u32TxByte=0x00000051UL;
+  u32 u32TxByte=0x0000005AUL;
   Putbyte(u32TxByte);
-  ReadByte(Anttt_u32RXBuffer);
+   ReadByte(Anttt_u32RXBuffer);
   if(NRF51422_SPI0->EVENTS_READY)
   {
     /*Clear the ready*/
-    NRF51422_SPI0->EVENTS_READY=0;
+    NRF51422_SPI0->EVENTS_READY=0;                 
     /*Blink Led*/
     
     if(bLedIsOn)
@@ -138,6 +143,10 @@ static void AntttSM_Idle(void)
       LedOn(BLUE);
       bLedIsOn=true;
     }
+  }
+  if(NRF_GPIO->OUT&(1<<23)==(1<<23))
+  {
+    LedOn(RED);
   }
   switch(Anttt_u32RXBuffer)
   {
