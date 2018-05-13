@@ -40,7 +40,7 @@ void SlaveTxFlowCallback(void);
 void UserApp1Initialize(void);
 void UserApp1RunActiveState(void);
 void Delayus(u16 DelaySlot);
-
+bool referee(void);
 /*------------------------------------------------------------------------------------------------------------------*/
 /*! @privatesection */                                                                                            
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -51,7 +51,7 @@ State Machine Declarations
 ***********************************************************************************************************************/
 static void UserApp1SM_Idle(void);    
 static void UserApp1SM_Error(void);         
-
+static void UserApp1SM_Tic_Tac_Toe(void);
 
 
 /**********************************************************************************************************************

@@ -66,6 +66,9 @@ static u8 u8RxBuffer[128]="\0";
 static SspPeripheralType  *psAvaliablesp;
 static u8* pu8Temp=NULL;
 static u8* pu8RXNextbyte=&u8RxBuffer[0];
+/*use array to record the location better than use a variable*/
+static u8 u8GameRecord[9]={' ',' ',' ',' ',' ',' ',' ',' ',' '};
+static u8 au8BleBuffer[13]={0x00};
 /**********************************************************************************************************************
 Function Definitions
 **********************************************************************************************************************/
@@ -174,6 +177,7 @@ State Machine Function Definitions
 static void UserApp1SM_Idle(void)
 {
    static u8 au8Display[13]="          " ;
+   
    static u8* pu8BufferParser=u8RxBuffer;
    static u8 u8DisplayIndex=0;
    static u8 u8ActiveCounter=0;
@@ -182,6 +186,7 @@ static void UserApp1SM_Idle(void)
    {
      /*READ*/
      au8Display[u8DisplayIndex]=*pu8BufferParser;
+     au8BleBuffer[u8DisplayIndex]=*pu8BufferParser;
      u8DisplayIndex++;
      pu8BufferParser++;
      u8ActiveCounter++; 
@@ -248,7 +253,7 @@ static void UserApp1SM_Idle(void)
      SspWriteByte(psAvaliablesp, (u8)0x04);
      LedToggle(YELLOW);
    }
-  
+  UserApp1_pfStateMachine = UserApp1SM_Tic_Tac_Toe;
     
 } /* end UserApp1SM_Idle() */
      
@@ -257,7 +262,8 @@ static void UserApp1SM_Idle(void)
 /* Handle an error */
 static void UserApp1SM_Error(void)          
 {
-  
+  LedOn(RED);
+  while(1);
 } /* end UserApp1SM_Error() */
 void SlaveRxFlowCallback(void)
 {
@@ -281,8 +287,223 @@ void Delayus(u16 DelaySlot)
     for(u8 i=0;i<=DelaySlot;i++); 
   }
 }
+/*!----------------------------------------------------------------------------------------------------------------------
+@fn void UserApp1SM_Tic_Tac_Toe(void)
 
+@brief :Used to  display figuration expected;
+Here i use teraterm to test ,teraterm input and output the result
+if you want to use the other way input,you can modify the state machine
+i seperated the state from idle for the code clear,and easier find problems when
+something wrong.
+Requires:
+-State machine function pointer points at current state
+-if you want process correctly,please excute UserApp1SM_Idle 
+firstly 
 
+Promises:
+- Calls the function to pointed by the state machine function pointer
+-the display will follow the following  figure:
+   - - - - - - - - -\n
+    0  |  1  |  2   \n
+   - - - - - - - - -\n
+    3  |  4  |  5   \n
+   - - - - - - - - -\n
+    6  |  7  |  8   \n
+   - - - - - - - - -\n
+Notes: 
+-there some apparently delay between the moment you press and the moment 
+you show the result.but the show result are in order ,so dont worry. 
+-i didnt design the game reset yet
+*/
+static void UserApp1SM_Tic_Tac_Toe(void)
+{
+  /*the 123456789<space> used for mark the display element for you count it  conveniently
+  <space> is equal to 10
+  you better check it again maybe a kind unaligned*/
+  //                         1         2        3         4            5         6           7         8            9         10         11        12       13        14        15        16        17
+  //                      123456789 1234567 8 9 123456789 1234567 8 9 123456789 123456 7 89 123456789 123456 7 89 123456789 12345 6 789 123456789 1234567 8 9 123456789 12345678 9 123456789 123456789 123456789
+  static  u8 u8Display[]="- - - - - - - - -\n\r  0  |  1  |  2   \n\r- - - - - - - - -\n\r  3  |  4  |  5   \n\r- - - - - - - - -\n\r  6  |  7  |  8   \n\r- - - - - - - - -\n\r";
+  //every number location is fixed,so just calcuate it,and create a pointer for each location 
+  static u8* pu8ZeroPosition=&u8Display[21];//start from 0 so 24 is eual to 23
+  static u8* pu8OnePosition=&u8Display[27];
+  static u8* pu8TwoPosition=&u8Display[33];
+  static u8* pu8ThreePosition=&u8Display[60];
+  static u8* pu8FourPosition=&u8Display[66];
+  static u8* pu8FivePosition=&u8Display[72];
+  static u8* pu8SixPosition=&u8Display[99];
+  static u8* pu8SevenPosition=&u8Display[105];
+  static u8* pu8EightPosition=&u8Display[111];
+  static bool bYourturn=FALSE;
+  static u8 u8YourInput[1]={' '};
+  
+  /*assume you use O(pc use o),You use pc input,button0 change who start first
+  at default your opponent first go*/
+  /*DebugScanf only once use once it will clear the buffer,you cant find it  any more*/
+  /*check input value*/
+  if(DebugScanf(u8YourInput))
+  {
+    if(u8YourInput[0]>'8')
+    {
+      DebugPrintf("error location");
+    }
+    /*record used to against repetition*/
+    if(u8GameRecord[u8YourInput[0]-'0']==' ')
+    {
+      if(bYourturn==0)
+      {
+        DebugPrintf("it's not your turn");
+        //u8GameRecord[u8YourInput[0]-'0']='X';
+        //bYourturn=TRUE;
+      }
+      else
+      {
+        /*here simulate your opponent when i just use pc*/
+        u8GameRecord[u8YourInput[0]-'0']='O';
+        bYourturn=FALSE;
+      }
+      /*use the middle array,we largely reduce the length of code,cause the arry can unify*/
+      switch(u8YourInput[0])
+      {
+        case '0':
+          if(bYourturn==TRUE)
+          *pu8ZeroPosition=u8GameRecord[u8YourInput[0]-'0'];break;
+        case '1':
+          if(bYourturn==TRUE)
+          *pu8OnePosition=u8GameRecord[u8YourInput[0]-'0'];break;
+        case '2':
+          if(bYourturn==TRUE)
+          *pu8TwoPosition=u8GameRecord[u8YourInput[0]-'0'];break; 
+        case '3':
+          *pu8ThreePosition=u8GameRecord[u8YourInput[0]-'0'];break;
+        case '4':
+          if(bYourturn==TRUE)
+         *pu8FourPosition=u8GameRecord[u8YourInput[0]-'0'];break;
+        case '5':
+          if(bYourturn==TRUE)
+          *pu8FivePosition=u8GameRecord[u8YourInput[0]-'0'];break;
+        case '6':
+          if(bYourturn==TRUE)
+          *pu8SixPosition=u8GameRecord[u8YourInput[0]-'0'];break;
+        case '7':
+          if(bYourturn==TRUE)
+          *pu8SevenPosition=u8GameRecord[u8YourInput[0]-'0'];break;
+        case '8':
+          if(bYourturn==TRUE)
+          *pu8EightPosition=u8GameRecord[u8YourInput[0]-'1'];break;
+        default:;      
+      }
+      DebugPrintf(u8Display);
+    }
+     else if(u8GameRecord[u8YourInput[0]-'0']=='X'||u8GameRecord[u8YourInput[0]-'0']=='O')
+     {
+        DebugPrintf("location has been used");
+     }
+  }
+  
+  /*Data from ble*/
+  /*in 1 ms ,i received 12 at most according to the ble transmit rate */
+  static u8 u8counter=12;
+  while(u8counter)
+  {
+    /*record used to against repetition*/
+     if(au8BleBuffer[u8counter]-1>9)
+     {
+      /*0xff and 0x00 is dummy byte,dont need to response it*/
+        if(au8BleBuffer[u8counter]!=0xFF&&au8BleBuffer[u8counter]!=0x00)
+        DebugPrintf("error location");  
+     }
+    if(u8GameRecord[au8BleBuffer[u8counter]-1]==' ')
+    {
+      if(bYourturn==0)
+      {
+        u8GameRecord[au8BleBuffer[u8counter]-1]='O';
+        bYourturn=TRUE;
+      }
+      else
+      {
+        /*here simulate your opponent when i just use pc*/
+        DebugPrintf("it's not your turn");
+        return;
+      }
+      switch(au8BleBuffer[u8counter])
+      {
+        
+          case 0x01:
+            if(bYourturn==0)
+            *pu8ZeroPosition=u8GameRecord[au8BleBuffer[u8counter]-1];break;
+          case 0x02:
+            if(bYourturn==0)
+            *pu8OnePosition=u8GameRecord[au8BleBuffer[u8counter]-1];break;
+          case 0x03:
+            if(bYourturn==0)
+            *pu8TwoPosition=u8GameRecord[au8BleBuffer[u8counter]-1];break; 
+          case 0x04:
+            if(bYourturn==0)
+            *pu8ThreePosition=u8GameRecord[au8BleBuffer[u8counter]-1];break;
+          case 0x05:
+            if(bYourturn==0)
+           *pu8FourPosition=u8GameRecord[au8BleBuffer[u8counter]-1];break;
+          case 0x06:
+            if(bYourturn==0)
+            *pu8FivePosition=u8GameRecord[au8BleBuffer[u8counter]-1];break;
+          case 0x07:
+            if(bYourturn==0)
+            *pu8SixPosition=u8GameRecord[au8BleBuffer[u8counter]-1];break;
+          case 0x08:
+            if(bYourturn==0)
+            *pu8SevenPosition=u8GameRecord[au8BleBuffer[u8counter]-1];break;
+          case 0x09:
+            if(bYourturn==0)
+            *pu8EightPosition=u8GameRecord[au8BleBuffer[u8counter]-1];break;
+          default:;
+              
+      } 
+    }
+    else if(u8GameRecord[au8BleBuffer[u8counter]-1]=='X'||u8GameRecord[au8BleBuffer[u8counter]-1]=='O')
+    {
+      DebugPrintf("location has been used");
+    }
+     u8counter--;
+  }
+  /*clear in case of the processed data be used again*/
+  for(u8 i =0;i<=12;i++)
+  {
+    au8BleBuffer[i]=0x00;
+  }
+    
+ 
+    
+   
+  /*every time i need  to clear u8YourIput in case of the last data be used*/
+  u8YourInput[0]=' ';
+  if(WasButtonPressed(BUTTON0))
+  {
+     ButtonAcknowledge(BUTTON0);
+     bYourturn=!bYourturn;
+     /*generate falling edge*/
+     //DebugPrintf(u8Display);
+  }
+}
+/*!----------------------------------------------------------------------------------------------------------------------
+@fn void referee(void)
+
+@brief referee is the person judge who win the game
+
+Requires:
+- 
+
+Promises:
+- 
+
+*/
+bool referee(void)
+{
+  /*this way has disadvantage:the length of code is too long,i think about it later*/
+  return (u8GameRecord[0]==u8GameRecord[1]&&u8GameRecord[0]==u8GameRecord[2])||(u8GameRecord[3]==u8GameRecord[4]&&u8GameRecord[3]==u8GameRecord[5])||\
+   (u8GameRecord[6]==u8GameRecord[7]&&u8GameRecord[6]==u8GameRecord[8])||(u8GameRecord[0]==u8GameRecord[3]&&u8GameRecord[0]==u8GameRecord[6])||\
+   (u8GameRecord[1]==u8GameRecord[4]&&u8GameRecord[1]==u8GameRecord[7])||(u8GameRecord[2]==u8GameRecord[5]&&u8GameRecord[2]==u8GameRecord[8])||\
+   (u8GameRecord[0]==u8GameRecord[4]&&u8GameRecord[0]==u8GameRecord[8])||  (u8GameRecord[2]==u8GameRecord[4]&&u8GameRecord[2]==u8GameRecord[6]);
+}
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* End of File                                                                                                        */
 /*--------------------------------------------------------------------------------------------------------------------*/
