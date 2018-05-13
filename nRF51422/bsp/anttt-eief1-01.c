@@ -86,8 +86,6 @@ void GpioSetup(void)
   NRF_GPIO->PIN_CNF[P0_11_INDEX] = P0_11_SCK_OUT_CNF;
   NRF_GPIO->PIN_CNF[P0_13_INDEX] = P0_13_MOSI_CNF;
   NRF_GPIO->PIN_CNF[P0_12_INDEX] = P0_12_MISO_CNF;
-  nrf_gpiote_event_config(0,9,0x03);
-  NRF_GPIOTE->INTENSET = 9;
   //NRF_GPIOTE->CONFIG[0]=0x00021801UL;//18:Pin number associated with OUT[n] task and IN[n] event.
    
 } /* end GpioSetup() */

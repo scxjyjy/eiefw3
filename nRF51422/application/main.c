@@ -77,7 +77,7 @@ void main(void)
   ANTIntegrationInitialize();
     
   BLEIntegrationInitialize();
-#if  Enablesoftdevice
+#if  0
   bleperipheralInitialize();
 #endif
   /* Application initialization */

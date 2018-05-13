@@ -70,7 +70,7 @@
       <WATCH_1>
         <expressions>
           
-        <item>a</item><item>u16TimeCounter</item><item>bLedIsOn</item><item>Anttt_u32RXBuffer</item><item>u32Result</item><item></item></expressions>
+        <item>a</item><item>u16TimeCounter</item><item>bLedIsOn</item><item>Anttt_u32RXBuffer</item><item>u32Result</item><item>bResult</item><item>bSendTask</item><item></item></expressions>
         <col-names>
           
           
@@ -103,20 +103,20 @@
       </WATCH_2>
       <WATCH_3>
         <expressions>
-          <item/>
-        </expressions>
+          
+        <item/></expressions>
         <col-names>
-          <item>Expression</item>
-          <item>Location</item>
-          <item>Type</item>
-          <item>Value</item>
-        </col-names>
+          
+          
+          
+          
+        <item>Expression</item><item>Location</item><item>Type</item><item>Value</item></col-names>
         <col-widths>
-          <item>100</item>
-          <item>150</item>
-          <item>100</item>
-          <item>100</item>
-        </col-widths>
+          
+          
+          
+          
+        <item>100</item><item>150</item><item>100</item><item>100</item></col-widths>
       </WATCH_3>
       <WATCH_4>
         <expressions>
@@ -181,7 +181,7 @@
         <vars>1</vars>
         <offset>0</offset>
       </STACK_1>
-    <Select-Ambiguous-Definitions><ColumnWidth0>215</ColumnWidth0><ColumnWidth1>30</ColumnWidth1><ColumnWidth2>370</ColumnWidth2></Select-Ambiguous-Definitions></Static>
+    <Select-Ambiguous-Definitions><ColumnWidth0>215</ColumnWidth0><ColumnWidth1>30</ColumnWidth1><ColumnWidth2>370</ColumnWidth2></Select-Ambiguous-Definitions><Find-All-Declarations><ColumnWidth0>215</ColumnWidth0><ColumnWidth1>30</ColumnWidth1><ColumnWidth2>370</ColumnWidth2></Find-All-Declarations></Static>
     <Windows>
       
       
@@ -207,7 +207,7 @@
             <TabName>Breakpoints</TabName>
             <Factory>Breakpoints</Factory>
           </Tab>
-        <Tab><Identity>TabID-300-25551</Identity><TabName>Ambiguous Definitions</TabName><Factory>Select-Ambiguous-Definitions</Factory><Session/></Tab></Tabs>
+        <Tab><Identity>TabID-300-25551</Identity><TabName>Ambiguous Definitions</TabName><Factory>Select-Ambiguous-Definitions</Factory><Session/></Tab><Tab><Identity>TabID-27940-27802</Identity><TabName>Declarations</TabName><Factory>Find-All-Declarations</Factory><Session/></Tab></Tabs>
         
       <SelectedTab>0</SelectedTab></Wnd0><Wnd1>
         <Tabs>
@@ -265,7 +265,7 @@
               
               
               
-            <REG1>0</REG1><REG2>0</REG2><Group>15</Group><States>5</States><State0>DIRSET</State0><State1>OUT</State1><State2>SPI0__CONFIG</State2><State3>SPI0__RXD</State3><State4>SPI0__TXD</State4></Session>
+            <REG1>0</REG1><REG2>0</REG2><Group>20</Group><States>5</States><State0>DIRSET</State0><State1>OUT</State1><State2>SPI0__CONFIG</State2><State3>SPI0__RXD</State3><State4>SPI0__TXD</State4></Session>
           </Tab>
           <Tab>
             <Identity>TabID-18786-28396</Identity>
@@ -301,7 +301,7 @@
               
               
               
-            <State2>SPI0__RXD</State2><REG1>0</REG1><REG2>66</REG2><Group>15</Group><States>2</States><State0>SPI0__CONFIG</State0><State1>SPI0__RXD</State1></Session>
+            <State2>SPI0__RXD</State2><REG1>0</REG1><REG2>0</REG2><Group>15</Group><States>2</States><State0>SPI0__CONFIG</State0><State1>SPI0__RXD</State1></Session>
           </Tab>
           <Tab>
             <Identity>TabID-28489-28418</Identity>
@@ -326,14 +326,14 @@
       
       
       
-    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\nordic_sdk6_1_0\Include\s310\ble.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>105</YPos2><SelStart2>4647</SelStart2><SelEnd2>4647</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\bsp\interrupts.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>57</YPos2><SelStart2>2740</SelStart2><SelEnd2>2740</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\application\anttt.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>124</YPos2><SelStart2>5421</SelStart2><SelEnd2>5421</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\application\main.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>35</YPos2><SelStart2>2689</SelStart2><SelEnd2>2689</SelEnd2></Tab><ActiveTab>3</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\application\anttt.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>14</YPos2><SelStart2>987</SelStart2><SelEnd2>991</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\nordic_sdk6_1_0\Include\nrf51.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>57</YPos2><SelStart2>5251</SelStart2><SelEnd2>5251</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\bsp\interrupts.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>5</YPos2><SelStart2>2601</SelStart2><SelEnd2>2601</SelEnd2></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\nordic_sdk6_1_0\Include\nrf_gpiote.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>18</YPos2><SelStart2>866</SelStart2><SelEnd2>892</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\bsp\soc_integration.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>98</YPos2><SelStart2>5337</SelStart2><SelEnd2>5337</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\bsp\interrupts.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>128</YPos2><SelStart2>5150</SelStart2><SelEnd2>5150</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\application\main.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>26</YPos2><SelStart2>2255</SelStart2><SelEnd2>2255</SelEnd2></Tab><ActiveTab>3</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\application\anttt.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>128</YPos2><SelStart2>5677</SelStart2><SelEnd2>5677</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\nordic_sdk6_1_0\Include\nrf_delay.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>23</YPos2><SelStart2>578</SelStart2><SelEnd2>578</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\nordic_sdk6_1_0\Include\s310\nrf_soc.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>20</XPos2><YPos2>264</YPos2><SelStart2>11226</SelStart2><SelEnd2>11226</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\application\anttt.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>81</YPos2><SelStart2>3936</SelStart2><SelEnd2>3936</SelEnd2></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
     <Positions>
       
       
       
       
       
-    <Top><Row0><Sizes><Toolbar-03EA5818><key>iaridepm.enu1</key></Toolbar-03EA5818><Toolbar-11D732E8><key>debuggergui.enu1</key></Toolbar-11D732E8></Sizes></Row0><Row1><Sizes><Toolbar-11D70278><key>armjlink.enu1</key></Toolbar-11D70278></Sizes></Row1></Top><Left><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>395</Bottom><Right>343</Right><x>-2</x><y>-2</y><xscreen>277</xscreen><yscreen>145</yscreen><sizeHorzCX>216406</sizeHorzCX><sizeHorzCY>226563</sizeHorzCY><sizeVertCX>269531</sizeVertCX><sizeVertCY>620313</sizeVertCY></Rect></Wnd1></Sizes></Row0></Left><Right><Row0><Sizes><Wnd4><Rect><Top>-2</Top><Left>-2</Left><Bottom>213</Bottom><Right>484</Right><x>-2</x><y>-2</y><xscreen>277</xscreen><yscreen>145</yscreen><sizeHorzCX>216406</sizeHorzCX><sizeHorzCY>226563</sizeHorzCY><sizeVertCX>379688</sizeVertCX><sizeVertCY>335938</sizeVertCY></Rect></Wnd4><Wnd6><Rect><Top>0</Top><Left>0</Left><Bottom>0</Bottom><Right>7</Right><x>-2</x><y>211</y><xscreen>277</xscreen><yscreen>145</yscreen><sizeHorzCX>216406</sizeHorzCX><sizeHorzCY>226563</sizeHorzCY><sizeVertCX>379688</sizeVertCX><sizeVertCY>287500</sizeVertCY></Rect></Wnd6></Sizes></Row0></Right><Bottom><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>176</Bottom><Right>641</Right><x>-2</x><y>-2</y><xscreen>643</xscreen><yscreen>178</yscreen><sizeHorzCX>502344</sizeHorzCX><sizeHorzCY>278125</sizeHorzCY><sizeVertCX>216406</sizeVertCX><sizeVertCY>226563</sizeVertCY></Rect></Wnd0><Wnd2><Rect><Top>0</Top><Left>0</Left><Bottom>0</Bottom><Right>7</Right><x>639</x><y>-2</y><xscreen>643</xscreen><yscreen>178</yscreen><sizeHorzCX>502344</sizeHorzCX><sizeHorzCY>278125</sizeHorzCY><sizeVertCX>216406</sizeVertCX><sizeVertCY>226563</sizeVertCY></Rect></Wnd2></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+    <Top><Row0><Sizes><Toolbar-02D96818><key>iaridepm.enu1</key></Toolbar-02D96818><Toolbar-2A9E7F10><key>debuggergui.enu1</key></Toolbar-2A9E7F10></Sizes></Row0><Row1><Sizes><Toolbar-2A9E7038><key>armjlink.enu1</key></Toolbar-2A9E7038></Sizes></Row1></Top><Left><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>395</Bottom><Right>343</Right><x>-2</x><y>-2</y><xscreen>277</xscreen><yscreen>145</yscreen><sizeHorzCX>216406</sizeHorzCX><sizeHorzCY>226563</sizeHorzCY><sizeVertCX>269531</sizeVertCX><sizeVertCY>620313</sizeVertCY></Rect></Wnd1></Sizes></Row0></Left><Right><Row0><Sizes><Wnd4><Rect><Top>-2</Top><Left>-2</Left><Bottom>213</Bottom><Right>478</Right><x>-2</x><y>-2</y><xscreen>277</xscreen><yscreen>145</yscreen><sizeHorzCX>216406</sizeHorzCX><sizeHorzCY>226563</sizeHorzCY><sizeVertCX>375000</sizeVertCX><sizeVertCY>335938</sizeVertCY></Rect></Wnd4><Wnd6><Rect><Top>0</Top><Left>0</Left><Bottom>277030240</Bottom><Right>277030456</Right><x>-2</x><y>211</y><xscreen>277</xscreen><yscreen>145</yscreen><sizeHorzCX>216406</sizeHorzCX><sizeHorzCY>226563</sizeHorzCY><sizeVertCX>375000</sizeVertCX><sizeVertCY>287500</sizeVertCY></Rect></Wnd6></Sizes></Row0></Right><Bottom><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>176</Bottom><Right>641</Right><x>-2</x><y>-2</y><xscreen>643</xscreen><yscreen>178</yscreen><sizeHorzCX>502344</sizeHorzCX><sizeHorzCY>278125</sizeHorzCY><sizeVertCX>216406</sizeVertCX><sizeVertCY>226563</sizeVertCY></Rect></Wnd0><Wnd2><Rect><Top>0</Top><Left>0</Left><Bottom>0</Bottom><Right>7</Right><x>639</x><y>-2</y><xscreen>643</xscreen><yscreen>178</yscreen><sizeHorzCX>502344</sizeHorzCX><sizeHorzCY>278125</sizeHorzCY><sizeVertCX>216406</sizeVertCX><sizeVertCY>226563</sizeVertCY></Rect></Wnd2></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
   </Desktop>
 </Project>
 

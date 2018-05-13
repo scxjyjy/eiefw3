@@ -26,6 +26,7 @@ Constants / Definitions
 #define M2    0x20000000UL
 #define M4    0x40000000UL
 #define M8    0x80000000UL
+#define SSP_DEFAULT_TX_BYTE 0x00000000UL
 #define  ReadByte(u32RXBuffer)  u32RXBuffer=NRF51422_SPI0->RXD
 #define  GPIOTE_MODE_FIELD  0x00000001UL
 #define  GPIOTE_PSEL_FIELD  0x00001800UL
@@ -93,8 +94,10 @@ void AntttRunActiveState(void);
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Private functions                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
-
-
+void SRDYCallBack(void);
+void SspAssertCS(void);
+void DeAssertCS(void);
+u8 ReadBleByte(void);
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* SM functions                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/

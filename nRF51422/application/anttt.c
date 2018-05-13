@@ -31,8 +31,10 @@ Variable names shall start with "Anttt_<type>" and be declared as static.
 ***********************************************************************************************************************/
 static fnCode_type Anttt_pfnStateMachine;              /* The application state machine function pointer */
 static u32 Anttt_u32RXBuffer=0x00000000UL;
-
-
+static u8 Anttt_u8RXBuffer[3]={0,0,0};
+static u8* Anttt_pu8RXBuffer=&Anttt_u8RXBuffer[0];
+static bool bSendTask=false;
+static u16 u16SendByteNumber=8;
 /**********************************************************************************************************************
 Function Definitions
 **********************************************************************************************************************/
@@ -63,16 +65,16 @@ void AntttInitialize(void)
   NRF_SPI0 ->PSELSCK=11;
   NRF_SPI0 ->PSELMOSI=13;
   NRF_SPI0 ->PSELMISO=12;
-  NRF_SPI0 ->CONFIG=0x00000003UL;
+  NRF_SPI0 ->CONFIG=0x00000007UL;
 
   /*Configure frequency*/
   NRF51422_SPI0->FREQUENCY=K125;
 
   /*enable chip*/
-  NRF_GPIO->OUTCLR=0X00000400UL;//10
+  //NRF_GPIO->OUTCLR=0X00000400UL;//10
   /*initialize set up sucessfully*/
-  LedOn(GREEN);;//GREEN LED
-  LedOff(BLUE);
+  //LedOn(GREEN);;//GREEN LED
+  //LedOff(BLUE);
   /*Disable twi0*/
   NRF_TWI0->ENABLE=0x00000000UL;
   NRF_SPI0 ->ENABLE=0x00000001UL;
@@ -122,11 +124,36 @@ State: AntttSM_Idle
 
 static void AntttSM_Idle(void)
 {
+/*BLE  Portion*/   
+//BPEngenuicsSendData(Anttt_pu8RXBuffer,1);
+/*SPI  Portion*/  
 #if 1
   static bool bLedIsOn=false;
-  u32 u32TxByte=0x0000005AUL;
-  Putbyte(u32TxByte);
-   ReadByte(Anttt_u32RXBuffer);
+  
+  u8 u8TxByte=0x30;
+  bSendTask=true;
+  /*if  you  want  to send useful byte,configure the bSendTask true*/
+  if(bSendTask&&(u16SendByteNumber))
+  {
+    u16SendByteNumber--;
+    /*if u32TxByte==0x00000000,we send dummy byte*/
+    if(u8TxByte==0x00UL)
+    {
+      Putbyte(SSP_DEFAULT_TX_BYTE);
+    }
+    else
+    {
+      Putbyte(u8TxByte);
+    }
+    ReadByte(Anttt_u32RXBuffer);
+    if(u16SendByteNumber==0)
+    {
+      DeAssertCS();
+      u16SendByteNumber=8;
+      bSendTask=false;
+    }
+  }
+ 
   if(NRF51422_SPI0->EVENTS_READY)
   {
     /*Clear the ready*/
@@ -144,22 +171,15 @@ static void AntttSM_Idle(void)
       bLedIsOn=true;
     }
   }
-  if(NRF_GPIO->OUT&(1<<23)==(1<<23))
-  {
-    LedOn(RED);
-  }
   switch(Anttt_u32RXBuffer)
   {
    case 0x00000001:LedToggle(GREEN);break;
    case 0x00000002:LedToggle(YELLOW);break;
-   case 0x00000003:LedToggle(RED);break;
+   case 0x00000003:LedToggle(GREEN);break;
    case 0x00000004:LedToggle(RED);break;
   default:;
   }
-  for(u16 i=0;i<100;i++)
-  {
-    for(u16 a=0;a<1000;a++);
-  }
+  nrf_delay_us(1000000);
  #endif  
 } 
 
@@ -186,9 +206,28 @@ void LedToggle(LED_Type led)
   NRF_GPIO->OUT^=(1<<led);
 }
 #endif   
-
-
-
+void SRDYCallBack()
+{
+  /*if the last the last sendtask has been finished,we deassertCs,so when
+  the new event coming,we assert cs and  the token*/ 
+  if(bSendTask==false)
+  {
+    SspAssertCS();
+    bSendTask=true;
+  }
+}
+void SspAssertCS(void)
+{
+  
+  NRF_GPIO->OUTCLR=0X00000400UL;
+}
+void DeAssertCS(void)
+{
+  NRF_GPIO->OUTSET=0X00000400UL;
+}
+u8 ReadBleByte(void)
+{
+}
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* End of File                                                                                                        */
 /*--------------------------------------------------------------------------------------------------------------------*/

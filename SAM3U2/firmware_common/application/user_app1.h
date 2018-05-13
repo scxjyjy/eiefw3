@@ -22,7 +22,7 @@ To start a new task using this user_app1 as a template:
 Type Definitions
 **********************************************************************************************************************/
 #define RxBufferMaxSize 20
-#define US_RTS2_PB24 24
+#define US_SREADY_PB24 24
 #define US_CTS2_PB21 21
 /**********************************************************************************************************************
 Function Declarations
@@ -39,7 +39,7 @@ void SlaveTxFlowCallback(void);
 /*--------------------------------------------------------------------------------------------------------------------*/
 void UserApp1Initialize(void);
 void UserApp1RunActiveState(void);
-
+void Delayus(u16 DelaySlot);
 
 /*------------------------------------------------------------------------------------------------------------------*/
 /*! @privatesection */                                                                                            

@@ -65,7 +65,12 @@ bool InterruptsInitialize(void)
   u32Result |= sd_nvic_SetPriority(SD_EVT_IRQn, NRF_APP_PRIORITY_LOW);
   u32Result |= sd_nvic_EnableIRQ(SD_EVT_IRQn);
   u32Result |= sd_nvic_SetPriority(GPIOTE_IRQn , NRF_APP_PRIORITY_LOW);
-  //u32Result |= sd_nvic_EnableIRQ(GPIOTE_IRQn );
+  u32Result |= sd_nvic_EnableIRQ(GPIOTE_IRQn );
+  u32Result |= sd_nvic_SetPriority(SPI0_TWI0_IRQn , NRF_APP_PRIORITY_LOW);
+  u32Result |= sd_nvic_EnableIRQ(SPI0_TWI0_IRQn );
+  nrf_gpiote_event_config(0,9,NRF_GPIOTE_POLARITY_HITOLO);
+  NRF_GPIOTE->INTENSET =0x00000001UL;//offset  is  0x100
+  //NRF51422_SPI0->INTENSET =0x00000004UL;
   return (u32Result == NRF_SUCCESS);
 #endif
 
@@ -131,7 +136,11 @@ Promises:
 */
 void GPIOTE_IRQHandler(void)
 {
-  LedOn(RED);
+  /*more  offcial use fn */
+  NRF_GPIOTE->EVENTS_IN[0]=0x00000000UL;
+  SRDYCallBack();
+  sd_nvic_ClearPendingIRQ(GPIOTE_IRQn);
+  //LedOn(RED);
 } /* end GPIOTE_IRQHandler() */
 
 /*--------------------------------------------------------------------------------------------------------------------
@@ -148,6 +157,7 @@ Promises:
 */
 void SPI0_TWI0_IRQHandler(void)
 {
+  NRF51422_SPI0->INTENCLR =0x00000000UL;
   LedOn(RED);
 } /* end GPIOTE_IRQHandler() */
 

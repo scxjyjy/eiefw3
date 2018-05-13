@@ -95,10 +95,7 @@ Promises:
 */
 void UserApp1Initialize(void)
 { 
-//  AT91C_BASE_PIOB->PIO_OER=(1<<21);
-//  AT91C_BASE_PIOB->PIO_CODR=(1<<21);
-//  for(u8 i=0;i<=100;i++);
-//  AT91C_BASE_PIOB->PIO_SODR=(1<<21);
+ 
   SspConfigurationType Sspcfg;
   Sspcfg.SspPeripheral=USART2;
   Sspcfg.pCsGpioAddress=AT91C_BASE_PIOB;
@@ -118,7 +115,19 @@ void UserApp1Initialize(void)
   /* If good initialization, set state to Idle */
   if(  psAvaliablesp!=NULL )
   {
+
    
+     /*ENABLE US_SREADY_PB24 */
+     AT91C_BASE_PIOB->PIO_OER=(1<<24);
+ #if 0
+     /*Reset nrf*/
+      AT91C_BASE_PIOB->PIO_OER=(1<<21);
+     AT91C_BASE_PIOB->PIO_CODR=(1<<21);
+     for(u8 i=0;i<=100;i++);
+      AT91C_BASE_PIOB->PIO_SODR=(1<<21);
+#endif
+      /*initialize the sready line as high level*/
+      AT91C_BASE_PIOB->PIO_SODR=(1<<US_SREADY_PB24);
     UserApp1_pfStateMachine = UserApp1SM_Idle;
   }
   else
@@ -164,7 +173,7 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
-   static u8 au8Display[13]="          \n" ;
+   static u8 au8Display[13]="          " ;
    static u8* pu8BufferParser=u8RxBuffer;
    static u8 u8DisplayIndex=0;
    static u8 u8ActiveCounter=0;
@@ -188,17 +197,20 @@ static void UserApp1SM_Idle(void)
    
    if(u8ActiveCounter>0)
    {
+     DebugPrintf(au8Display);
      u8ActiveCounter=0;
      LedToggle(GREEN);
    }
+   
 #endif
    if(WasButtonPressed(BUTTON0))
    {
      ButtonAcknowledge(BUTTON0);
      /*generate falling edge*/
-     AT91C_BASE_PIOB->PIO_SODR=(1<<US_RTS2_PB24);
-     for(u8 i=0;i<=100;i++);
-     AT91C_BASE_PIOB->PIO_CODR=(1<<US_RTS2_PB24);
+     AT91C_BASE_PIOB->PIO_CODR=(1<<US_SREADY_PB24);
+     Delayus(10);
+     AT91C_BASE_PIOB->PIO_SODR=(1<<US_SREADY_PB24);
+ 
      
      SspWriteByte(psAvaliablesp, (u8)0x01);
      LedToggle(BLUE);
@@ -206,19 +218,34 @@ static void UserApp1SM_Idle(void)
    if(WasButtonPressed(BUTTON1))
    {
      ButtonAcknowledge(BUTTON1);
+     
+     AT91C_BASE_PIOB->PIO_CODR=(1<<US_SREADY_PB24);
+     Delayus(1000);
+     AT91C_BASE_PIOB->PIO_SODR=(1<<US_SREADY_PB24);
+     
      SspWriteByte(psAvaliablesp, (u8)0x10);
      LedToggle(RED);
    }
    if(WasButtonPressed(BUTTON2))
    {
      ButtonAcknowledge(BUTTON2);
-     SspWriteByte(psAvaliablesp, (u8)0x30);
+     
+     AT91C_BASE_PIOB->PIO_SODR=(1<<US_SREADY_PB24);
+     Delayus(100);
+     AT91C_BASE_PIOB->PIO_CODR=(1<<US_SREADY_PB24);
+     
+     SspWriteByte(psAvaliablesp, (u8)0x03);
      LedToggle(YELLOW);
    }
    if(WasButtonPressed(BUTTON3))
    {
      ButtonAcknowledge(BUTTON3);
-     SspWriteByte(psAvaliablesp, (u8)0x40);
+     
+     AT91C_BASE_PIOB->PIO_SODR=(1<<US_SREADY_PB24);
+     Delayus(100);
+     AT91C_BASE_PIOB->PIO_CODR=(1<<US_SREADY_PB24);
+     
+     SspWriteByte(psAvaliablesp, (u8)0x04);
      LedToggle(YELLOW);
    }
   
@@ -247,7 +274,13 @@ void SlaveTxFlowCallback(void)
   
 }
 
-
+void Delayus(u16 DelaySlot)
+{
+  for(u8 i=0;i<=1;i++)
+  {
+    for(u8 i=0;i<=DelaySlot;i++); 
+  }
+}
 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
