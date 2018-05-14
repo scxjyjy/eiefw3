@@ -79,10 +79,19 @@ void AntttInitialize(void)
   NRF_TWI0->ENABLE=0x00000000UL;
   NRF_SPI0 ->ENABLE=0x00000001UL;
   #endif
+  LedOn(GREEN);
+  LedOn(YELLOW);
+  LedOn(RED);
+  LedOn(BLUE);
   for(u16 i=0;i<1000;i++)
   {
     for(u16 a=0;a<10000;a++);
   }
+  LedOff(GREEN);
+  LedOff(YELLOW);
+  LedOff(RED);
+  LedOff(BLUE);
+  nrf_delay_us(10000);
   Anttt_pfnStateMachine = AntttSM_Idle;
   
 
@@ -131,7 +140,7 @@ static void AntttSM_Idle(void)
   static bool bLedIsOn=false;
   
   u8 u8TxByte=0x30;
-  bSendTask=true;
+  //bSendTask=true;
   /*if  you  want  to send useful byte,configure the bSendTask true*/
   if(bSendTask&&(u16SendByteNumber))
   {

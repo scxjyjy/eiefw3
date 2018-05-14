@@ -225,7 +225,7 @@ static void UserApp1SM_Idle(void)
      ButtonAcknowledge(BUTTON1);
      
      AT91C_BASE_PIOB->PIO_CODR=(1<<US_SREADY_PB24);
-     Delayus(1000);
+     Delayus(10);
      AT91C_BASE_PIOB->PIO_SODR=(1<<US_SREADY_PB24);
      
      SspWriteByte(psAvaliablesp, (u8)0x10);
@@ -236,7 +236,7 @@ static void UserApp1SM_Idle(void)
      ButtonAcknowledge(BUTTON2);
      
      AT91C_BASE_PIOB->PIO_SODR=(1<<US_SREADY_PB24);
-     Delayus(100);
+     Delayus(10);
      AT91C_BASE_PIOB->PIO_CODR=(1<<US_SREADY_PB24);
      
      SspWriteByte(psAvaliablesp, (u8)0x03);
@@ -247,7 +247,7 @@ static void UserApp1SM_Idle(void)
      ButtonAcknowledge(BUTTON3);
      
      AT91C_BASE_PIOB->PIO_SODR=(1<<US_SREADY_PB24);
-     Delayus(100);
+     Delayus(10);
      AT91C_BASE_PIOB->PIO_CODR=(1<<US_SREADY_PB24);
      
      SspWriteByte(psAvaliablesp, (u8)0x04);
@@ -389,7 +389,7 @@ static void UserApp1SM_Tic_Tac_Toe(void)
           *pu8SevenPosition=u8GameRecord[u8YourInput[0]-'0'];break;
         case '8':
           if(bYourturn==TRUE)
-          *pu8EightPosition=u8GameRecord[u8YourInput[0]-'1'];break;
+          *pu8EightPosition=u8GameRecord[u8YourInput[0]-'0'];break;
         default:;      
       }
       DebugPrintf(u8Display);
@@ -412,7 +412,7 @@ static void UserApp1SM_Tic_Tac_Toe(void)
         if(au8BleBuffer[u8counter]!=0xFF&&au8BleBuffer[u8counter]!=0x00)
         DebugPrintf("error location");  
      }
-    if(u8GameRecord[au8BleBuffer[u8counter]-1]==' ')
+    else if(u8GameRecord[au8BleBuffer[u8counter]-1]==' ')
     {
       if(bYourturn==0)
       {
@@ -455,9 +455,34 @@ static void UserApp1SM_Tic_Tac_Toe(void)
           case 0x09:
             if(bYourturn==0)
             *pu8EightPosition=u8GameRecord[au8BleBuffer[u8counter]-1];break;
-          default:;
-              
+          default:;       
       } 
+      if(referee)
+      {
+        if(bYourturn)
+        {
+          DebugPrintf("you win");
+        }
+        else
+        {
+          DebugPrintf("ble win");
+        }
+      }
+      else
+      {
+        for(u8 i=0;i<=8;i++)
+        {
+          if(u8GameRecord[i]==' ')
+          {
+            return;
+          }
+          else if(i==8&&u8GameRecord[i]!=' ')
+          {
+            DebugPrintf("end in a tie");
+          }
+         
+        }
+      }
     }
     else if(u8GameRecord[au8BleBuffer[u8counter]-1]=='X'||u8GameRecord[au8BleBuffer[u8counter]-1]=='O')
     {
@@ -483,6 +508,7 @@ static void UserApp1SM_Tic_Tac_Toe(void)
      /*generate falling edge*/
      //DebugPrintf(u8Display);
   }
+  UserApp1_pfStateMachine = UserApp1SM_Idle;
 }
 /*!----------------------------------------------------------------------------------------------------------------------
 @fn void referee(void)
