@@ -24,6 +24,19 @@ Type Definitions
 #define RxBufferMaxSize 20
 #define US_SREADY_PB24 24
 #define US_CTS2_PB21 21
+typedef struct
+{
+ //every number location is fixed,so just calcuate it,and create a pointer for each location 
+  u8* pu8ZeroPosition;//start from 0 so 24 is eual to 23
+  u8* pu8OnePosition;
+  u8* pu8TwoPosition;
+  u8* pu8ThreePosition;
+  u8* pu8FourPosition;
+  u8* pu8FivePosition;
+  u8* pu8SixPosition;
+  u8* pu8SevenPosition;
+  u8* pu8EightPosition;
+}u8Position;
 /**********************************************************************************************************************
 Function Declarations
 **********************************************************************************************************************/
@@ -41,6 +54,7 @@ void UserApp1Initialize(void);
 void UserApp1RunActiveState(void);
 void Delayus(u16 DelaySlot);
 bool referee(void);
+void reStart(void);
 /*------------------------------------------------------------------------------------------------------------------*/
 /*! @privatesection */                                                                                            
 /*--------------------------------------------------------------------------------------------------------------------*/

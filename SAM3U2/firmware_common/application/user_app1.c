@@ -69,6 +69,7 @@ static u8* pu8RXNextbyte=&u8RxBuffer[0];
 /*use array to record the location better than use a variable*/
 static u8 u8GameRecord[9]={' ',' ',' ',' ',' ',' ',' ',' ',' '};
 static u8 au8BleBuffer[13]={0x00};
+static u8Position tic_tac_position;
 /**********************************************************************************************************************
 Function Definitions
 **********************************************************************************************************************/
@@ -186,7 +187,7 @@ static void UserApp1SM_Idle(void)
    {
      /*READ*/
      au8Display[u8DisplayIndex]=*pu8BufferParser;
-     au8BleBuffer[u8DisplayIndex]=*pu8BufferParser;
+     au8BleBuffer[u8DisplayIndex+1]=*pu8BufferParser;
      u8DisplayIndex++;
      pu8BufferParser++;
      u8ActiveCounter++; 
@@ -324,15 +325,15 @@ static void UserApp1SM_Tic_Tac_Toe(void)
   //                      123456789 1234567 8 9 123456789 1234567 8 9 123456789 123456 7 89 123456789 123456 7 89 123456789 12345 6 789 123456789 1234567 8 9 123456789 12345678 9 123456789 123456789 123456789
   static  u8 u8Display[]="- - - - - - - - -\n\r     |     |      \n\r- - - - - - - - -\n\r     |     |      \n\r- - - - - - - - -\n\r     |     |      \n\r- - - - - - - - -\n\r";
   //every number location is fixed,so just calcuate it,and create a pointer for each location 
-  static u8* pu8ZeroPosition=&u8Display[21];//start from 0 so 24 is eual to 23
-  static u8* pu8OnePosition=&u8Display[27];
-  static u8* pu8TwoPosition=&u8Display[33];
-  static u8* pu8ThreePosition=&u8Display[60];
-  static u8* pu8FourPosition=&u8Display[66];
-  static u8* pu8FivePosition=&u8Display[72];
-  static u8* pu8SixPosition=&u8Display[99];
-  static u8* pu8SevenPosition=&u8Display[105];
-  static u8* pu8EightPosition=&u8Display[111];
+  tic_tac_position.pu8ZeroPosition=&u8Display[21];//start from 0 so 24 is eual to 23
+  tic_tac_position.pu8OnePosition=&u8Display[27];
+  tic_tac_position.pu8TwoPosition=&u8Display[33];
+  tic_tac_position.pu8ThreePosition=&u8Display[60];
+  tic_tac_position.pu8FourPosition=&u8Display[66];
+  tic_tac_position.pu8FivePosition=&u8Display[72];
+  tic_tac_position.pu8SixPosition=&u8Display[99];
+  tic_tac_position.pu8SevenPosition=&u8Display[105];
+  tic_tac_position.pu8EightPosition=&u8Display[111];
   static bool bYourturn=TRUE;
   static u8 u8YourInput[1]={' '};
   
@@ -344,14 +345,14 @@ static void UserApp1SM_Tic_Tac_Toe(void)
   {
     if(u8YourInput[0]>'8')
     {
-      DebugPrintf("error location");
+      DebugPrintf("error location\n\r");
     }
     /*record used to against repetition*/
     if(u8GameRecord[u8YourInput[0]-'0']==' ')
     {
       if(bYourturn==0)
       {
-        DebugPrintf("it's not your turn");
+        DebugPrintf("it's not your turn\n\r");
         //u8GameRecord[u8YourInput[0]-'0']='X';
         //bYourturn=TRUE;
       }
@@ -366,23 +367,68 @@ static void UserApp1SM_Tic_Tac_Toe(void)
        switch(u8YourInput[0])
        {
         case '0':
-          {*pu8ZeroPosition='O';bYourturn=0;}break;
+          *tic_tac_position.pu8ZeroPosition='O';bYourturn=0;
+           if(referee())
+           {
+             reStart();
+             DebugPrintf("you win\n\r"); 
+           }break;
         case '1':
-          {*pu8OnePosition='O';bYourturn=0;}break;
+          *tic_tac_position.pu8OnePosition='O';bYourturn=0;
+           if(referee())
+            {
+             reStart();
+             DebugPrintf("you win\n\r"); 
+            }break;
         case '2':
-          {*pu8TwoPosition=u8GameRecord[u8YourInput[0]-'0'];bYourturn=0;}break; 
+          *tic_tac_position.pu8TwoPosition=u8GameRecord[u8YourInput[0]-'0'];bYourturn=0;
+           if(referee())
+            {
+              reStart();
+             DebugPrintf("you win\n\r"); 
+            }break; 
         case '3':
-          {*pu8ThreePosition=u8GameRecord[u8YourInput[0]-'0'];bYourturn=0;}break;
+          *tic_tac_position.pu8ThreePosition=u8GameRecord[u8YourInput[0]-'0'];bYourturn=0;
+           if(referee())
+            {
+              reStart();
+             DebugPrintf("you win\n\r"); 
+            }break;
         case '4':
-          {*pu8FourPosition=u8GameRecord[u8YourInput[0]-'0'];bYourturn=0;}break;
+          *tic_tac_position.pu8FourPosition=u8GameRecord[u8YourInput[0]-'0'];bYourturn=0;
+           if(referee())
+            {
+              reStart();
+             DebugPrintf("you win\n\r"); 
+            }break;
         case '5':
-          {*pu8FivePosition=u8GameRecord[u8YourInput[0]-'0'];bYourturn=0;}break;
+          *tic_tac_position.pu8FivePosition=u8GameRecord[u8YourInput[0]-'0'];bYourturn=0;
+           if(referee())
+            {
+              reStart();
+             DebugPrintf("you win\n\r"); 
+            }break;
         case '6':
-          {*pu8SixPosition=u8GameRecord[u8YourInput[0]-'0'];bYourturn=0;}break;
+          *tic_tac_position.pu8SixPosition=u8GameRecord[u8YourInput[0]-'0'];bYourturn=0;
+           if(referee())
+            {
+              reStart();
+             DebugPrintf("you win\n\r"); 
+            }break;
         case '7':
-          {*pu8SevenPosition=u8GameRecord[u8YourInput[0]-'0'];bYourturn=0;}break;
+          *tic_tac_position.pu8SevenPosition=u8GameRecord[u8YourInput[0]-'0'];bYourturn=0;
+           if(referee())
+            {
+              reStart();
+             DebugPrintf("you win\n\r"); 
+            }break;
         case '8':
-          {*pu8EightPosition=u8GameRecord[u8YourInput[0]-'0'];bYourturn=0;}break;
+          *tic_tac_position.pu8EightPosition=u8GameRecord[u8YourInput[0]-'0'];bYourturn=0;
+           if(referee())
+            {
+              reStart();
+             DebugPrintf("you win\n\r"); 
+            }break;
         default:;      
       }
      }
@@ -390,7 +436,7 @@ static void UserApp1SM_Tic_Tac_Toe(void)
     }
      else if(u8GameRecord[u8YourInput[0]-'0']=='X'||u8GameRecord[u8YourInput[0]-'0']=='O')
      {
-        DebugPrintf("location has been used");
+        DebugPrintf("location has been used\n\r");
      }
   }
   
@@ -400,62 +446,108 @@ static void UserApp1SM_Tic_Tac_Toe(void)
   while(u8counter)
   {
     /*record used to against repetition*/
-     if(au8BleBuffer[u8counter]-1>9)
+     if((au8BleBuffer[u8counter]/2)-1>9)
      {
       /*0xff and 0x00 is dummy byte,dont need to response it*/
         if(au8BleBuffer[u8counter]!=0xFF&&au8BleBuffer[u8counter]!=0x00)
-        DebugPrintf("error location");  
+        DebugPrintf("error location\n");  
      }
-    else if(u8GameRecord[au8BleBuffer[u8counter]-1]==' ')
+    else if(u8GameRecord[au8BleBuffer[u8counter]/2-1]==' ')
     {
       if(bYourturn==0)
       {
-        u8GameRecord[au8BleBuffer[u8counter]-1]='X';
+        u8GameRecord[au8BleBuffer[u8counter]/2-1]='X';
       }
       else
       {
         /*here simulate your opponent when i just use pc*/
-        DebugPrintf("it's not your turn");
-        return;
+        DebugPrintf("it's not your turn\n\r");
+        u8counter=1;
       }
       switch(au8BleBuffer[u8counter])
       {
         
-          case 0x01:
-            if(bYourturn==0)
-            {*pu8ZeroPosition=u8GameRecord[au8BleBuffer[u8counter]-1];bYourturn=1;}break;
           case 0x02:
             if(bYourturn==0)
-            {*pu8OnePosition=u8GameRecord[au8BleBuffer[u8counter]-1];bYourturn=1;}break;
-          case 0x03:
-            if(bYourturn==0)
-            {*pu8TwoPosition=u8GameRecord[au8BleBuffer[u8counter]-1];bYourturn=1;}break; 
+            {*tic_tac_position.pu8ZeroPosition='X';bYourturn=1;DebugPrintf(u8Display);}
+            if(referee())
+            {
+              reStart();
+             DebugPrintf("ble win\n\r"); 
+            }break;
           case 0x04:
             if(bYourturn==0)
-            {*pu8ThreePosition=u8GameRecord[au8BleBuffer[u8counter]-1];bYourturn=1;}break;
-          case 0x05:
-            if(bYourturn==0)
-            {*pu8FourPosition=u8GameRecord[au8BleBuffer[u8counter]-1];bYourturn=1;}break;
+            {*tic_tac_position.pu8OnePosition='X';bYourturn=1;DebugPrintf(u8Display);}
+             if(referee())
+            {
+              reStart();
+             DebugPrintf("ble win\n"); 
+            }break;
           case 0x06:
             if(bYourturn==0)
-            {*pu8FivePosition=u8GameRecord[au8BleBuffer[u8counter]-1];bYourturn=1;}break;
-          case 0x07:
-            if(bYourturn==0)
-            {*pu8SixPosition=u8GameRecord[au8BleBuffer[u8counter]-1];bYourturn=1;}break;
+            {*tic_tac_position.pu8TwoPosition='X';bYourturn=1;DebugPrintf(u8Display);}
+             if(referee())
+            {
+              reStart();
+             DebugPrintf("ble win\n\r"); 
+            }break; 
           case 0x08:
             if(bYourturn==0)
-            {*pu8SevenPosition=u8GameRecord[au8BleBuffer[u8counter]-1];bYourturn=1;}break;
-          case 0x09:
+            {*tic_tac_position.pu8ThreePosition='X';bYourturn=1;DebugPrintf(u8Display);}
+             if(referee())
+            {
+              reStart();
+             DebugPrintf("ble win\n\r"); 
+            }break;
+          case 0x0A:
             if(bYourturn==0)
-            {*pu8EightPosition=u8GameRecord[au8BleBuffer[u8counter]-1];bYourturn=1;}break;
+            {*tic_tac_position.pu8FourPosition='X';bYourturn=1;DebugPrintf(u8Display);}
+             if(referee())
+            {
+              reStart();
+              reStart();
+             DebugPrintf("ble win\n\r"); 
+            }break;
+          case 0x0C:
+            if(bYourturn==0)
+            {*tic_tac_position.pu8FivePosition='X';bYourturn=1;DebugPrintf(u8Display);}
+             if(referee())
+            {
+              reStart();
+             DebugPrintf("ble win\n\r"); 
+            }break;
+          case 0x0E:
+            if(bYourturn==0)
+            {*tic_tac_position.pu8SixPosition='X';bYourturn=1;DebugPrintf(u8Display);}
+             if(referee())
+            {
+              reStart();
+             DebugPrintf("ble win\n\r"); 
+            }break;
+          case 0x10:
+            if(bYourturn==0)
+            {*tic_tac_position.pu8SevenPosition='X';bYourturn=1;DebugPrintf(u8Display);}
+            if(referee())
+            {
+              reStart();
+             DebugPrintf("ble win\n\r"); 
+            }break;
+          case 0x12:
+            if(bYourturn==0)
+            {*tic_tac_position.pu8EightPosition='X';bYourturn=1;DebugPrintf(u8Display);}
+             if(referee())
+            {
+              reStart();
+             DebugPrintf("ble win\n\r"); 
+            }break;
           default:;       
       } 
       au8BleBuffer[u8counter]=0x00;
      
     }
-    else if(u8GameRecord[au8BleBuffer[u8counter]-1]=='X'||u8GameRecord[au8BleBuffer[u8counter]-1]=='O')
+    else if(u8GameRecord[au8BleBuffer[u8counter]/2-1]=='X'||u8GameRecord[au8BleBuffer[u8counter]/2-1]=='O')
     {
-      DebugPrintf("location has been used");
+      DebugPrintf("location has been used\n\r");
     }
      u8counter--;
  
@@ -499,11 +591,33 @@ Promises:
 bool referee(void)
 {
   /*this way has disadvantage:the length of code is too long,i think about it later*/
-  return (u8GameRecord[0]==u8GameRecord[1]&&u8GameRecord[0]==u8GameRecord[2])||(u8GameRecord[3]==u8GameRecord[4]&&u8GameRecord[3]==u8GameRecord[5])||\
-   (u8GameRecord[6]==u8GameRecord[7]&&u8GameRecord[6]==u8GameRecord[8])||(u8GameRecord[0]==u8GameRecord[3]&&u8GameRecord[0]==u8GameRecord[6])||\
-   (u8GameRecord[1]==u8GameRecord[4]&&u8GameRecord[1]==u8GameRecord[7])||(u8GameRecord[2]==u8GameRecord[5]&&u8GameRecord[2]==u8GameRecord[8])||\
-   (u8GameRecord[0]==u8GameRecord[4]&&u8GameRecord[0]==u8GameRecord[8])||  (u8GameRecord[2]==u8GameRecord[4]&&u8GameRecord[2]==u8GameRecord[6]);
+  return (((u8GameRecord[0]==u8GameRecord[1])&&(u8GameRecord[0]==u8GameRecord[2])&&(u8GameRecord[0]!=' '))\
+   || ((u8GameRecord[3]==u8GameRecord[4])&&(u8GameRecord[3]==u8GameRecord[5]&&u8GameRecord[3]!=' '))\
+  || ((u8GameRecord[6]==u8GameRecord[7])&&(u8GameRecord[6]==u8GameRecord[8])&&(u8GameRecord[6]!=' '))\
+  ||   ((u8GameRecord[0]==u8GameRecord[3])&&(u8GameRecord[0]==u8GameRecord[6])&&(u8GameRecord[0]!=' '))\
+  || ((u8GameRecord[1]==u8GameRecord[4])&&(u8GameRecord[1]==u8GameRecord[7])&&(u8GameRecord[7]!=' '))\
+   ||  ((u8GameRecord[2]==u8GameRecord[5])&&(u8GameRecord[2]==u8GameRecord[8])&&(u8GameRecord[2]!=' '))\
+  || ((u8GameRecord[0]==u8GameRecord[4])&&(u8GameRecord[0]==u8GameRecord[8])&&(u8GameRecord[4]!=' '))\
+   ||  ((u8GameRecord[2]==u8GameRecord[4])&&(u8GameRecord[2]==u8GameRecord[6])&&(u8GameRecord[4]!=' ')));
 }
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* End of File                                                                                                        */
 /*--------------------------------------------------------------------------------------------------------------------*/
+void reStart(void)
+{
+  for(u8 i=0;i<=8;i++)
+  {
+    u8GameRecord[i]=' ';
+  }
+  *tic_tac_position.pu8ZeroPosition=' ';//start from 0 so 24 is eual to 23
+  *tic_tac_position.pu8OnePosition=' ';
+  *tic_tac_position.pu8TwoPosition=' ';
+  *tic_tac_position.pu8ThreePosition=' ';
+  *tic_tac_position.pu8FourPosition=' ';
+  *tic_tac_position.pu8FivePosition=' ';
+  *tic_tac_position.pu8SixPosition=' ';
+  *tic_tac_position.pu8SevenPosition=' ';
+  *tic_tac_position.pu8EightPosition=' ';
+  DebugPrintf("Restart\n\r");
+  
+}
