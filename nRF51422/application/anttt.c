@@ -65,7 +65,7 @@ void AntttInitialize(void)
   NRF_SPI0 ->PSELSCK=11;
   NRF_SPI0 ->PSELMOSI=13;
   NRF_SPI0 ->PSELMISO=12;
-  NRF_SPI0 ->CONFIG=0x00000007UL;
+  NRF_SPI0 ->CONFIG=0x00000003UL;
 
   /*Configure frequency*/
   NRF51422_SPI0->FREQUENCY=K125;
@@ -136,7 +136,7 @@ static void AntttSM_Idle(void)
 /*BLE  Portion*/   
 //BPEngenuicsSendData(Anttt_pu8RXBuffer,1);
 /*SPI  Portion*/  
-#if 1
+#if 0
   static bool bLedIsOn=false;
   
   u8 u8TxByte=0x30;

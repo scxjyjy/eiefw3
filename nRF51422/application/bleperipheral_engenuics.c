@@ -335,11 +335,10 @@ static void CallbackBleperipheralEngenuicsDataRx(u8* u8Data_, u8 u8Length_)
 {
   // Forward handling to ANTTT module.
   /*there is no meaning data will in rx,just cause full duplex*/
-    //SspAssertCS();
+    SspAssertCS();
     u32 u32Rx;
-    Putbyte(* u8Data_);
+    Putbyte((* u8Data_-0x30));
     ReadByte(u32Rx);
-    LedOn(GREEN);
   
 }
 
